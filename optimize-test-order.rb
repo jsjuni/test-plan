@@ -7,13 +7,29 @@ require 'rgl/transitivity'
 require 'TSP_2opt'
 require 'optparse'
 
+class TestCircuit < TSP::Path
+
+  def initialize(array, cost_map)
+    @cost_map = cost_map
+    a = array.dup.unshift({ 'id' => 0, 'scenarios' => [] })
+    super(a)
+  end
+
+  def distance(i, j)
+    apply = at(j)['scenarios'] - at(i)['scenarios']
+    retract = at(i)['scenarios'] - at(j)['scenarios']
+    (apply + retract).inject(0) { |s, e| s + @cost_map[e.to_s] }
+  end
+
+end
+
 class OptimizeTestOrder < Logger::Application
 
   def initialize
     super('optimize-test-order')
 
     logger.level = Logger::INFO
- end
+  end
 
   def run
 
@@ -31,18 +47,16 @@ class OptimizeTestOrder < Logger::Application
     log(Logger::INFO, "loaded #{cost_map.length} cost map entries")
 
     tests = JSON.parse(ARGF.read)
-    path = @options[:resort] ? tests.sort_by { rand } : tests
-    init = { 'id' => 0, 'scenarios' => [] }
-    path.unshift(init)
-    tsp = TSP_2opt.new(path, cost_map)
+    path = TestCircuit.new(@options[:resort] ? tests.sort_by { rand } : tests, cost_map)
+    tsp = TSP::TSP_2opt.new(path)
     log(Logger::INFO, "initial order path length: #{tsp.length}")
     tsp.optimize if @options[:optimize]
     log(Logger::INFO, "optimized order path length: #{tsp.length}")
 
     opt_tests = []
     while (pair = tsp.path.take(2)).length == 2 do
-      retract = pair[0].retract_for(pair[1])
-      apply = pair[0].apply_for(pair[1])
+      retract = pair[0]['scenarios'] - pair[1]['scenarios']
+      apply = pair[1]['scenarios'] - pair[0]['scenarios']
       opt_tests << pair[1].merge(
         'scenarios' => pair[1]['scenarios'].to_a.sort,
         'retract' => retract.to_a.sort,
