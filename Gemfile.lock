@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    logger (1.7.0)
+    logger-application (0.0.2)
+    ostruct (0.6.1)
+    pairing_heap (3.1.0)
+    rexml (3.4.1)
+    rgl (0.6.6)
+      pairing_heap (>= 0.3, < 4.0)
+      rexml (~> 3.2, >= 3.2.4)
+      stream (~> 0.5.3)
+    stream (0.5.5)
+
+PLATFORMS
+  ruby
+  x86_64-darwin-24
+
+DEPENDENCIES
+  logger
+  logger-application
+  ostruct
+  rgl
+
+BUNDLED WITH
+   2.6.2
