@@ -48,8 +48,8 @@ class GenerateTests < Logger::Application
     grc = g.transitive_closure
     proc_count = 0
     tests = []
-    while (pair = path.take(2)).length == 2
-     requirements = (grc.adjacent_vertices(pair[1]).dup.unshift(pair[1])).inject(Set.new) do |s, v|
+    path.each do |ss|
+      requirements = grc.adjacent_vertices(ss).inject(Set.new(rqts_by_ss[ss])) do |s, v|
         s + rqts_by_ss[v]
       end
       quantities = requirements.inject(Set.new) do |s, r|
@@ -61,10 +61,9 @@ class GenerateTests < Logger::Application
       end
       tests << {
         id: proc_count += 1,
-        scenarios: pair[1].to_a.sort,
+        scenarios: ss.to_a.sort,
         quantities: qh
       }
-      path.shift
     end
     log(Logger::INFO, "emitting #{tests.length} test configurations")
     puts JSON.pretty_generate(tests)
