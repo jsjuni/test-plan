@@ -48,6 +48,11 @@ class GenerateGanttProject < Logger::Application
       prev_task = task
     end
 
+    final_duration = (tests.last['scenarios']).inject(0) { |s, r| s + r } / max_duration * 5
+    final_task = ProjectXML::Task.new(10001, "Final Unconfiguration", final_duration)
+    prev_task.add_successor(10001)
+    parent_task << final_task
+
     project.replace_tasks([parent_task])
 
     puts project.to_s
