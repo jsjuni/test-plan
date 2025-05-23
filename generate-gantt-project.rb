@@ -10,7 +10,7 @@ class GenerateGanttProject < Logger::Application
   def initialize
     super('generate-gantt-project')
 
-    logger.level = Logger::DEBUG
+    logger.level = Logger::INFO
   end
 
   def run

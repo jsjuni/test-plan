@@ -12,7 +12,7 @@ class OptimizeTestOrder < Logger::Application
   def initialize
     super('optimize-test-order')
 
-    logger.level = Logger::DEBUG
+    logger.level = Logger::INFO
  end
 
   def run
