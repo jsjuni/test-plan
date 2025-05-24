@@ -20,7 +20,7 @@ class GenerateCosts < Logger::Application
     n_scenarios = scenarios.length
 
     costs_hash = scenarios.inject(Hash.new) do |h, k|
-      h[k] = (c = (k.sub(/[^\d]+/, '\1').to_i) % n_scenarios) == 0 ? n_scenarios : c
+      h[k] = (c = (k.gsub(/\D+/, '').to_i) % n_scenarios) == 0 ? n_scenarios : c
       h
     end
     puts JSON.pretty_generate(costs_hash)
