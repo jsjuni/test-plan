@@ -34,11 +34,11 @@ end
 task :filter_tests => %w[tests-with-10.json tests-without-10.json]
 
 file 'tests-with-10.json' => 'tests-raw.json' do |t|
-  system "ruby -I. filter-tests.rb -w 10 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. filter-tests.rb -w S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-without-10.json' => 'tests-raw.json' do |t|
-  system "ruby -I. filter-tests.rb -x 10 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. filter-tests.rb -x S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate unoptimized test plans
