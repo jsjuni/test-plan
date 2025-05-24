@@ -4,6 +4,12 @@ require 'logger/application'
 require 'date'
 require 'json'
 
+class String
+  def serial
+    gsub(/\D+/, '').to_i
+  end
+end
+
 class GenerateTestplan < Logger::Application
 
   def initialize
@@ -52,7 +58,7 @@ class GenerateTestplan < Logger::Application
       puts
       puts 'Applicable scenarios:'
       puts
-      test['scenarios'].each do |scenario|
+      test['scenarios'].sort_by(&:serial).each do |scenario|
         puts "* #{scenario}"
       end
       puts
@@ -61,7 +67,7 @@ class GenerateTestplan < Logger::Application
       unless (retract = test['retract']).empty?
         puts 'Retract these scenarios:'
         puts
-        retract.each do |scenario|
+        retract.sort_by(&:serial).each do |scenario|
           puts "* #{scenario}"
         end
         puts
@@ -69,7 +75,7 @@ class GenerateTestplan < Logger::Application
       unless (apply = test['apply']).empty?
         puts 'Apply these scenarios:'
         puts
-        apply.each do |scenario|
+        apply.sort_by(&:serial).each do |scenario|
           puts "* #{scenario}"
         end
         puts
@@ -79,14 +85,14 @@ class GenerateTestplan < Logger::Application
         puts
         puts 'Retract these scenarios:'
         puts
-        test['scenarios'].each do |scenario|
+        test['scenarios'].sort_by(&:serial).each do |scenario|
           puts "* #{scenario}"
         end
         puts
       end
       puts '==== Requirements in Scope'
       puts
-      test['quantities'].values.map { |v| v['requirements'] }.flatten.sort.uniq.each do |req|
+      test['quantities'].values.map { |v| v['requirements'] }.flatten.uniq.sort_by(&:serial).each do |req|
         puts "* #{req}"
       end
       puts
@@ -94,7 +100,7 @@ class GenerateTestplan < Logger::Application
       puts
       puts 'Record observations of these quantities:'
       puts
-      test['quantities'].each_key do |quantity|
+      test['quantities'].keys.sort_by(&:serial).each do |quantity|
         puts "* #{quantity}"
       end
       puts
