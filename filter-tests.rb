@@ -13,8 +13,8 @@ class FilterTests < Logger::Application
 
     @options = {}
     OptionParser.new do |parser|
-      parser.on('-w', '--with [NUMERIC] SCENARIO', 'filter tests requiring SCENARIO', Integer)
-      parser.on('-x', '--without [NUMERIC] SCENARIO', 'filter tests not requiring SCENARIO', Integer)
+      parser.on('-w', '--with SCENARIO', 'filter tests requiring SCENARIO')
+      parser.on('-x', '--without SCENARIO', 'filter tests not requiring SCENARIO')
     end.parse!(into: @options)
   end
 
