@@ -24,8 +24,21 @@ class GenerateTestplan < Logger::Application
     nc = tests.length
     ns = tests.inject(Set.new) { |s, t| s + t['scenarios'] }.length
     nq = tests.inject(Set.new) { |s, t| s + t['quantities'].keys }.length
-    nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
+    all_rqts = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }
+    nr = all_rqts.length
     nsc = js['length']
+
+    qty_by_rqt = { }
+    test_abbrevs_by_rqt = Hash.new { |h, k| h[k] = Set.new }
+    tests.each do |test|
+      test_abbrev = "Test #{test['id']} {#{test['scenarios'].sort_by(&:serial).join(', ')}}"
+      test['quantities'].each do |quantity, rh|
+        rh['requirements'].each do |rqt|
+          qty_by_rqt[rqt] = quantity
+          test_abbrevs_by_rqt[rqt] << test_abbrev
+        end
+      end
+    end
 
     puts '= Test Plan'
     puts 'Test Plan Author'
@@ -105,6 +118,22 @@ class GenerateTestplan < Logger::Application
       end
       puts
     end
+
+    puts '== Summary'
+    puts
+    puts '|==='
+    puts '| Requirement | Quantity | Test(s) '
+    all_rqts.sort_by(&:serial).each do |req|
+      rs = test_abbrevs_by_rqt[req].length
+      puts ".#{rs}+| #{req}"
+      puts ".#{rs}+| #{qty_by_rqt[req]}"
+      test_abbrevs_by_rqt[req].sort_by { |ta| ta.match(/Test (\d+)/)[1].to_i }.each do |ta|
+        puts "|#{ta}"
+        puts
+      end
+    end
+    puts '|==='
+    puts
     0
   end
 end
