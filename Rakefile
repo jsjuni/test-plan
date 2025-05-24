@@ -14,6 +14,7 @@ task :default => %w[
   tests-without-10-optimized.html
   tests-without-10-unoptimized-vis.txt
   tests-without-10-unoptimized.html
+  test-campaign-progress.png
 ]
 
 # Generate requirements
@@ -149,7 +150,7 @@ file 'tests-without-10-optimized.adoc' => 'tests-without-10-optimized.json' do |
 end
 
 file 'tests-without-10-optimized.html' => 'tests-without-10-optimized.adoc' do |t|
-  system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')}"
 end
 
 # Generate GanttProject files
@@ -160,4 +161,10 @@ end
 
 file 'tests-optimized-schedule.xml' => 'tests-optimized.json' do |t|
   system "ruby -I. generate-gantt-project.rb --template GanttProject.xml #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+# Generate progress plot
+
+file 'test-campaign-progress.png' => %w[tests-unoptimized-schedule.gan tests-optimized-schedule.gan] do |t|
+  system "Rscript plot-progress.R #{t.prerequisites.join(' ')} #{t.name}"
 end

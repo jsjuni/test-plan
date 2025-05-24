@@ -60,3 +60,5 @@ build-iPhoneSimulator/
 *.adoc
 *.html
 *.gan
+.Rproj.user
+*.png
