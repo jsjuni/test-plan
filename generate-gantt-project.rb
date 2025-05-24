@@ -21,8 +21,15 @@ class GenerateGanttProject < Logger::Application
 
     @options = {}
     OptParse.new do |parser|
+      parser.on('-c MAP', '--cost-map MAP', 'cost map')
       parser.on('-t', '--template TEMPLATE', 'template file')
     end.parse!(into: @options)
+
+    raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
+    raise 'missing template file' unless (template_file = @options['template'.to_sym])
+
+    log(Logger::INFO, "loading cost map")
+    cost_map = JSON.parse(File.read(cost_map_file))
 
     template = File.read(@options[:template])
     project = ProjectXML::Project.new(template)
@@ -30,7 +37,7 @@ class GenerateGanttProject < Logger::Application
     tests = JSON.parse(ARGF.read)['tests']
 
     max_duration = tests.inject(0) do |m, t|
-      d = (t['apply'] + t['retract']).inject(0) { |s, r| s + r }
+      d = (t['apply'] + t['retract']).inject(0) { |s, r| s + cost_map[r] }
       m > d ? m : d
     end.to_f
     log(Logger::DEBUG, "max duration: #{max_duration}")
@@ -42,7 +49,7 @@ class GenerateGanttProject < Logger::Application
       test_id = t['id']
       task_id = test_id * 10
       parent_task << task = ProjectXML::Task.new(task_id, "Test #{test_id}", 0)
-      config_duration = duration((t['apply'] + t['retract']).inject(0) { |s, r| s + r })
+      config_duration = duration((t['apply'] + t['retract']).inject(0) { |s, r| s + cost_map[r] })
       log(Logger::DEBUG, "test #{test_id} config duration: #{config_duration}")
       task << config_task = ProjectXML::Task.new(task_id + 1, "Test #{test_id} Configuration", config_duration)
       exec_duration = 1
@@ -52,7 +59,7 @@ class GenerateGanttProject < Logger::Application
       prev_task = task
     end
 
-    final_duration = duration((tests.last['scenarios']).inject(0) { |s, r| s + r })
+    final_duration = duration((tests.last['scenarios']).inject(0) { |s, r| s + cost_map[r] })
     final_task = ProjectXML::Task.new(10001, "Final Unconfiguration", final_duration)
     prev_task.add_successor(10001)
     parent_task << final_task

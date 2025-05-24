@@ -24,11 +24,13 @@ class GenerateTests < Logger::Application
     rqts_by_ss = Hash.new { |h, k| h[k] = Set.new }
     rqts_by_qty = Hash.new { |h, k| h[k] = Set.new }
     qty_by_rqt = {}
-    requirements.each do |h|
-      scenario_sets << Set.new(h['scenarios'])
-      rqts_by_ss[Set.new(h['scenarios'])] << h['id']
-      rqts_by_qty[h['quantity']] << h['id']
-      qty_by_rqt[h['id']] = h['quantity']
+    requirements.each do |rh|
+      rh['configs'].each do |ch|
+        scenario_sets << Set.new(ch['scenarios'])
+        rqts_by_ss[Set.new(ch['scenarios'])] << rh['id']
+      end
+      rqts_by_qty[rh['quantity']] << rh['id']
+      qty_by_rqt[rh['id']] = rh['quantity']
     end
     log(Logger::INFO, "found #{scenario_sets.size} scenario_sets")
 

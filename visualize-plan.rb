@@ -21,10 +21,11 @@ class VisualizePlan < Logger::Application
     puts "length: #{js['length']}"
     rem = tests.length % 10
     tens = (tests.length - rem) / 10
-    puts '    ' + TEN_MARKER * tens + '.' * rem + ' changes'
+    puts '      ' + TEN_MARKER * tens + '.' * rem + ' changes'
 
-    scenarios.sort.each do |scenario|
-      label = "%3d " % scenario
+    ss = scenarios.sort_by { |s| s.gsub(/[^\d]+/, '\1').to_i }
+    ss.each do |scenario|
+      label = "%5s " % scenario
       changes = 0
       last_in = false
       data = tests.inject(String.new) do |s, t|
