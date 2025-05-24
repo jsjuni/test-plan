@@ -8,7 +8,7 @@ module ProjectXML
 
   class Task < REXML::Element
 
-    def initialize(id, name, duration, start = Date.today.iso8601)
+    def initialize(id, name, duration = 1, start = Date.today.iso8601)
       super('task')
       self.attributes['id'] = id
       self.attributes['uid'] = SecureRandom.uuid

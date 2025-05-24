@@ -13,6 +13,10 @@ class GenerateGanttProject < Logger::Application
     logger.level = Logger::INFO
   end
 
+  def duration(distance)
+    (distance / 20.0 + 0.5).round
+  end
+
   def run
 
     @options = {}
@@ -38,7 +42,7 @@ class GenerateGanttProject < Logger::Application
       test_id = t['id']
       task_id = test_id * 10
       parent_task << task = ProjectXML::Task.new(task_id, "Test #{test_id}", 0)
-      config_duration = (t['apply'] + t['retract']).inject(0) { |s, r| s + r } / max_duration * 5
+      config_duration = duration((t['apply'] + t['retract']).inject(0) { |s, r| s + r })
       log(Logger::DEBUG, "test #{test_id} config duration: #{config_duration}")
       task << config_task = ProjectXML::Task.new(task_id + 1, "Test #{test_id} Configuration", config_duration)
       exec_duration = 1
@@ -48,7 +52,7 @@ class GenerateGanttProject < Logger::Application
       prev_task = task
     end
 
-    final_duration = (tests.last['scenarios']).inject(0) { |s, r| s + r } / max_duration * 5
+    final_duration = duration((tests.last['scenarios']).inject(0) { |s, r| s + r })
     final_task = ProjectXML::Task.new(10001, "Final Unconfiguration", final_duration)
     prev_task.add_successor(10001)
     parent_task << final_task
