@@ -76,6 +76,8 @@ class GenerateTestplan < Logger::Application
     tests.each do |test|
       puts "=== Test #{test['id']}"
       puts
+      puts "Test UUID: #{test['uuid']}"
+      puts
       puts '==== Configuration'
       puts
       puts 'Applicable scenarios:'

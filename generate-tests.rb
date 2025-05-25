@@ -4,6 +4,7 @@ require 'json'
 require 'logger/application'
 require 'rgl/adjacency'
 require 'optparse'
+require 'securerandom'
 
 class GenerateTests < Logger::Application
 
@@ -66,6 +67,7 @@ class GenerateTests < Logger::Application
       end
       tests << {
         id: proc_count += 1,
+        uuid: SecureRandom.uuid,
         scenarios: ss.to_a.sort,
         quantities: qh,
         requirements_direct: requirements_direct.to_a,

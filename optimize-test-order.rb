@@ -54,10 +54,12 @@ class OptimizeTestOrder < Logger::Application
     log(Logger::INFO, "optimized order path length: #{tsp.length}")
 
     opt_tests = []
+    test_count = 0
     while (pair = tsp.path.take(2)).length == 2 do
       retract = pair[0]['scenarios'] - pair[1]['scenarios']
       apply = pair[1]['scenarios'] - pair[0]['scenarios']
       opt_tests << pair[1].merge(
+        'id' => test_count += 1,
         'scenarios' => pair[1]['scenarios'].to_a.sort,
         'retract' => retract.to_a.sort,
         'apply' => apply.to_a.sort
