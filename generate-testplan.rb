@@ -128,7 +128,8 @@ class GenerateTestplan < Logger::Application
       puts ".#{rs}+| #{req}"
       puts ".#{rs}+| #{qty_by_rqt[req]}"
       test_abbrevs_by_rqt[req].sort_by { |ta| ta.match(/Test (\d+)/)[1].to_i }.each do |ta|
-        puts "|#{ta}"
+        xref = '_test_' + ta.match(/Test (\d+)/)[1]
+        puts "|<<#{xref},#{ta}>>"
         puts
       end
     end
