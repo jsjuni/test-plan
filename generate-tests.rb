@@ -3,7 +3,6 @@
 require 'json'
 require 'logger/application'
 require 'rgl/adjacency'
-require 'rgl/transitivity'
 require 'optparse'
 
 class GenerateTests < Logger::Application
@@ -47,12 +46,11 @@ class GenerateTests < Logger::Application
     end
 
     path = g.vertices.to_a
-    grc = g.transitive_closure
     proc_count = 0
     tests = []
     path.each do |ss|
       requirements_direct = rqts_by_ss[ss]
-      requirements = grc.adjacent_vertices(ss).inject(requirements_direct) do |s, v|
+      requirements = g.adjacent_vertices(ss).inject(requirements_direct) do |s, v|
         s + rqts_by_ss[v]
       end
       quantities = requirements.inject(Set.new) do |s, r|
