@@ -64,6 +64,14 @@ class GenerateTestplan < Logger::Application
     puts
     puts '== Tests'
     puts
+    puts "For each test,"
+    puts "an asterisk following a requirement indicates that the requirement explicitly applies during"
+    puts "the scenario of that test. A requirement without an asterisk applies during some less"
+    puts "restrictive scenario and therefore in this scenario by implication."
+    puts
+    puts "A asterisk following a quantity indicates that the quantity is constrained by an"
+    puts "explicitly-applicable requirement."
+    puts
 
     tests.each do |test|
       puts "=== Test #{test['id']}"
@@ -107,7 +115,8 @@ class GenerateTestplan < Logger::Application
       puts '==== Requirements in Scope'
       puts
       test['quantities'].values.map { |v| v['requirements'] }.flatten.uniq.sort_by(&:serial).each do |req|
-        puts "* #{req}"
+        direct = (test['requirements_direct'].include?(req)) ? '*' : ''
+        puts "* #{req}#{direct}"
       end
       puts
       puts '==== Observations'
@@ -115,7 +124,8 @@ class GenerateTestplan < Logger::Application
       puts 'Record observations of these quantities:'
       puts
       test['quantities'].keys.sort_by(&:serial).each do |quantity|
-        puts "* #{quantity}"
+        direct = (test['quantities_direct'].include?(quantity)) ? '*' : ''
+        puts "* #{quantity}#{direct}"
       end
       puts
     end

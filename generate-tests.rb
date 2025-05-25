@@ -51,7 +51,8 @@ class GenerateTests < Logger::Application
     proc_count = 0
     tests = []
     path.each do |ss|
-      requirements = grc.adjacent_vertices(ss).inject(Set.new(rqts_by_ss[ss])) do |s, v|
+      requirements_direct = rqts_by_ss[ss]
+      requirements = grc.adjacent_vertices(ss).inject(requirements_direct) do |s, v|
         s + rqts_by_ss[v]
       end
       quantities = requirements.inject(Set.new) do |s, r|
@@ -61,10 +62,16 @@ class GenerateTests < Logger::Application
         h[q] = { requirements: rqts_by_qty[q].intersection(requirements).sort }
         h
       end
+      quantities_direct = qh.inject([]) do |s, (q, rh)|
+        s << q if rh[:requirements].any? { |r| requirements_direct.include?(r) }
+        s
+      end
       tests << {
         id: proc_count += 1,
         scenarios: ss.to_a.sort,
-        quantities: qh
+        quantities: qh,
+        requirements_direct: requirements_direct.to_a,
+        quantities_direct: quantities_direct
       }
     end
     log(Logger::INFO, "emitting #{tests.length} test configurations")
