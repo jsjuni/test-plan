@@ -66,8 +66,8 @@ class GenerateTestplan < Logger::Application
     puts
     puts "For each test,"
     puts "an asterisk following a requirement indicates that the requirement explicitly applies during"
-    puts "the scenario of that test. A requirement without an asterisk applies during some less"
-    puts "restrictive scenario and therefore in this scenario by implication."
+    puts "the configuration (scenario set) of that test. A requirement without an asterisk applies during some less"
+    puts "restrictive configuration and therefore in this configuration by implication."
     puts
     puts "A asterisk following a quantity indicates that the quantity is constrained by an"
     puts "explicitly-applicable requirement."
