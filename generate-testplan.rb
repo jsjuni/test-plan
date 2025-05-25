@@ -24,15 +24,16 @@ class GenerateTestplan < Logger::Application
     nc = tests.length
     ns = tests.inject(Set.new) { |s, t| s + t['scenarios'] }.length
     nq = tests.inject(Set.new) { |s, t| s + t['quantities'].keys }.length
-    all_rqts = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }
-    nr = all_rqts.length
+    nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
     nsc = js['length']
 
     qty_by_rqt = { }
+    test_abbrevs_by_qty = Hash.new { |h, k| h[k] = Set.new }
     test_abbrevs_by_rqt = Hash.new { |h, k| h[k] = Set.new }
     tests.each do |test|
       test_abbrev = "Test #{test['id']} {#{test['scenarios'].sort_by(&:serial).join(', ')}}"
       test['quantities'].each do |quantity, rh|
+        test_abbrevs_by_qty[quantity] << test_abbrev
         rh['requirements'].each do |rqt|
           qty_by_rqt[rqt] = quantity
           test_abbrevs_by_rqt[rqt] << test_abbrev
@@ -119,11 +120,13 @@ class GenerateTestplan < Logger::Application
       puts
     end
 
-    puts '== Summary'
+    puts '== Summary Tables'
+    puts
+    puts '=== Summary by Requirement'
     puts
     puts '|==='
     puts '| Requirement | Quantity | Test(s) '
-    all_rqts.sort_by(&:serial).each do |req|
+    test_abbrevs_by_rqt.keys.sort_by(&:serial).each do |req|
       rs = test_abbrevs_by_rqt[req].length
       puts ".#{rs}+| #{req}"
       puts ".#{rs}+| #{qty_by_rqt[req]}"
@@ -135,6 +138,23 @@ class GenerateTestplan < Logger::Application
     end
     puts '|==='
     puts
+
+    puts '=== Summary by Quantity'
+    puts
+    puts '|==='
+    puts '| Quantity | Test(s) '
+    test_abbrevs_by_qty.keys.sort_by(&:serial).each do |qty|
+      qs = test_abbrevs_by_qty[qty].length
+      puts ".#{qs}+| #{qty}"
+      test_abbrevs_by_qty[qty].sort_by { |ta| ta.match(/Test (\d+)/)[1].to_i }.each do |ta|
+        xref = '_test_' + ta.match(/Test (\d+)/)[1]
+        puts "|<<#{xref},#{ta}>>"
+        puts
+      end
+    end
+    puts '|==='
+    puts
+
     0
   end
 end
