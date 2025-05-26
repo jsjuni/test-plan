@@ -16,8 +16,10 @@ class TestCircuit < TSP::Path
   end
 
   def distance(i, j)
-    apply = at(j)['scenarios'] - at(i)['scenarios']
-    retract = at(i)['scenarios'] - at(j)['scenarios']
+    si = at(i)['scenarios']
+    sj = at(j)['scenarios']
+    apply = sj - si
+    retract = si - sj
     (apply + retract).inject(0) { |s, e| s + @cost_map[e.to_s] }
   end
 
