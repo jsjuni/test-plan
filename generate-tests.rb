@@ -3,6 +3,7 @@
 require 'json'
 require 'logger/application'
 require 'rgl/adjacency'
+require 'rgl/transitivity'
 require 'optparse'
 require 'securerandom'
 
@@ -16,6 +17,12 @@ class GenerateTests < Logger::Application
   end
 
   def run
+
+    options = {}
+    OptionParser.new do |opts|
+      opts.banner = 'Usage: generate-tests.rb [options]'
+      opts.on('-g GRAPH', '--graph GRAPH', 'save situation graph')
+    end.parse!(into: options)
 
     requirements = JSON.parse(ARGF.read)['requirements']
     log(Logger::INFO, "found #{requirements.length} requirements")
@@ -46,7 +53,7 @@ class GenerateTests < Logger::Application
       end
     end
 
-    path = g.vertices.to_a
+   path = g.vertices.to_a
     proc_count = 0
     tests = []
     path.each do |ss|
@@ -76,6 +83,19 @@ class GenerateTests < Logger::Application
     end
     log(Logger::INFO, "emitting #{tests.length} test configurations")
     puts JSON.pretty_generate(tests)
+
+    if options[:graph]
+      rg = g.transitive_reduction
+      edges = rg.edges.map do |edge|
+        {
+          from: edge[0].to_a,
+          to: edge[1].to_a
+        }
+      end
+      File.open(options[:graph], 'w') do |f|
+        f.puts JSON.pretty_generate(edges)
+      end
+    end
 
     0
   end
