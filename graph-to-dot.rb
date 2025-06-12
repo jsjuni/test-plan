@@ -25,10 +25,10 @@ class GraphToDot < Logger::Application
     node_label = {}
     node_id = {}
     vertices.each do |size, set|
-      set.each do |situation|
-        unless node_label[situation]
-          node_label[situation] = "{#{situation.join(', ')}}"
-          node_id[situation] = Base64.urlsafe_encode64(node_label[situation], :padding => false)
+      set.each do |configuration|
+        unless node_label[configuration]
+          node_label[configuration] = "{#{configuration.join(', ')}}"
+          node_id[configuration] = Base64.urlsafe_encode64(node_label[configuration], :padding => false)
           end
       end
     end

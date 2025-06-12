@@ -1,5 +1,5 @@
 task :default => %w[
-  situations_graph
+  configurations_graph
   unoptimized_visualizations
   optimized_visualizations
   test_docs
@@ -27,20 +27,20 @@ end
 task :raw_tests => 'tests-raw.json'
 
 file 'tests-raw.json' => %w[requirements.json] do |t|
-  system "ruby -I. generate-tests.rb --graph situations-graph.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. generate-tests.rb --graph configurations-graph.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-# Visualize situations graph
+# Visualize configurations graph
 
-task :situations_graph => 'situations-graph.svg'
+task :configurations_graph => 'configurations-graph.svg'
 
-file 'situations-graph.json' => %w[tests-raw.json]
+file 'configurations-graph.json' => %w[tests-raw.json]
 
-file 'situations-graph.dot' => %w[situations-graph.json] do |t|
+file 'configurations-graph.dot' => %w[configurations-graph.json] do |t|
   system "ruby graph-to-dot.rb #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'situations-graph.svg' => %w[situations-graph.dot] do |t|
+file 'configurations-graph.svg' => %w[configurations-graph.dot] do |t|
   system "dot -Tsvg #{t.prerequisites.join(' ')} > #{t.name}"
 end
 

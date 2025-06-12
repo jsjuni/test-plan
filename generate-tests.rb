@@ -21,7 +21,7 @@ class GenerateTests < Logger::Application
     options = {}
     OptionParser.new do |opts|
       opts.banner = 'Usage: generate-tests.rb [options]'
-      opts.on('-g GRAPH', '--graph GRAPH', 'save situation graph')
+      opts.on('-g GRAPH', '--graph GRAPH', 'save configurations graph')
     end.parse!(into: options)
 
     requirements = JSON.parse(ARGF.read)['requirements']
