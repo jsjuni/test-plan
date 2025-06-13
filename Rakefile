@@ -27,7 +27,9 @@ end
 task :raw_tests => 'tests-raw.json'
 
 file 'tests-raw.json' => %w[requirements.json] do |t|
-  system "ruby -I. generate-tests.rb --graph configurations-graph.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. generate-tests.rb --graph configurations-graph.json" +
+         " --summary requirements-summary.json" +
+         " #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Visualize configurations graph

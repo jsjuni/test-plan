@@ -22,6 +22,7 @@ class GenerateTests < Logger::Application
     OptionParser.new do |opts|
       opts.banner = 'Usage: generate-tests.rb [options]'
       opts.on('-g GRAPH', '--graph GRAPH', 'save configurations graph')
+      opts.on('-s SUMMARY', '--summary SUMMARY', 'save requirements summary')
     end.parse!(into: options)
 
     requirements = JSON.parse(ARGF.read)['requirements']
@@ -57,19 +58,19 @@ class GenerateTests < Logger::Application
     proc_count = 0
     tests = []
     path.each do |ss|
-      requirements_direct = rqts_by_ss[ss]
-      requirements = g.adjacent_vertices(ss).inject(requirements_direct) do |s, v|
+      rqmts_direct = rqts_by_ss[ss]
+      rqmts = g.adjacent_vertices(ss).inject(rqmts_direct) do |s, v|
         s + rqts_by_ss[v]
       end
-      quantities = requirements.inject(Set.new) do |s, r|
+      quantities = rqmts.inject(Set.new) do |s, r|
         s << qty_by_rqt[r]
       end.sort
       qh = quantities.inject({}) do |h, q|
-        h[q] = { requirements: rqts_by_qty[q].intersection(requirements).sort }
+        h[q] = { requirements: rqts_by_qty[q].intersection(rqmts).sort }
         h
       end
       quantities_direct = qh.inject([]) do |s, (q, rh)|
-        s << q if rh[:requirements].any? { |r| requirements_direct.include?(r) }
+        s << q if rh[:requirements].any? { |r| rqmts_direct.include?(r) }
         s
       end
       tests << {
@@ -77,7 +78,7 @@ class GenerateTests < Logger::Application
         uuid: SecureRandom.uuid,
         scenarios: ss.to_a.sort,
         quantities: qh,
-        requirements_direct: requirements_direct.to_a,
+        requirements_direct: rqmts_direct.to_a,
         quantities_direct: quantities_direct
       }
     end
@@ -94,6 +95,25 @@ class GenerateTests < Logger::Application
       end
       File.open(options[:graph], 'w') do |f|
         f.puts JSON.pretty_generate(edges)
+      end
+    end
+
+    rg = g.reverse
+    if options[:summary]
+      summary = []
+      requirements.each do |rh|
+        configs = rh['configs'].map { |c| Set.new(c['scenarios']) }.inject(Set.new) do |m, ss|
+          m << ss.to_a
+          m += rg.adjacent_vertices(ss).map { |s| s.to_a }
+          m
+        end.to_a
+        summary << {
+          id: rh['id'],
+          configs: configs
+        }
+      end
+      File.open(options[:summary], 'w') do |f|
+        f.puts JSON.pretty_generate(summary)
       end
     end
 
