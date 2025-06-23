@@ -46,15 +46,24 @@ file 'configurations-graph.svg' => %w[configurations-graph.dot] do |t|
   system "dot -Tsvg #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Prune tests using sufficiency assertions
+
+task :pruned_tests => 'tests-pruned.json'
+
+file 'tests-pruned.json' => %w[tests-raw.json sufficient.json] do |t|
+  t.prerequisites.delete('sufficient.json')
+  system "ruby prune-tests.rb --sufficiency sufficient.json #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 # Filter test subsets
 
 task :filter_tests => %w[tests-with-10.json tests-without-10.json]
 
-file 'tests-with-10.json' => 'tests-raw.json' do |t|
+file 'tests-with-10.json' => 'tests-pruned.json' do |t|
   system "ruby -I. filter-tests.rb -w S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10.json' => 'tests-raw.json' do |t|
+file 'tests-without-10.json' => 'tests-pruned.json' do |t|
   system "ruby -I. filter-tests.rb -x S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
@@ -62,7 +71,7 @@ end
 
 task :unoptimized_test_plans => %w[tests-unoptimized.json tests-with-10-unoptimized.json tests-without-10-unoptimized.json]
 
-file 'tests-unoptimized.json' => %w[costs.json tests-raw.json] do |t|
+file 'tests-unoptimized.json' => %w[costs.json tests-pruned.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
@@ -81,7 +90,7 @@ end
 
 task :optimized_test_plans => %w[tests-optimized.json tests-with-10-optimized.json tests-without-10-optimized.json]
 
-file 'tests-optimized.json' => %w[tests-raw.json] do |t|
+file 'tests-optimized.json' => %w[tests-pruned.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
