@@ -6,19 +6,28 @@ task :default => %w[
   schedules
 ]
 
+# Generate scenarios
+
+task :scenarios => 'scenarios.json'
+
+file 'scenarios.json' do |t|
+  system "ruby generate-scenarios.rb > #{t.name}"
+end
+
 # Generate requirements
 
 task :requirements => 'requirements.json'
 
-file 'requirements.json' do |t|
-  system "ruby -I. generate-requirements.rb > #{t.name}"
+file 'requirements.json' => 'scenarios.json' do |t|
+  t.prerequisites.delete('scenarios.json')
+  system "ruby -I. generate-requirements.rb --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate scaled cost map
 
 task :costs => 'costs.json'
 
-file 'costs.json' => 'requirements.json' do |t|
+file 'costs.json' => 'scenarios.json' do |t|
   system "ruby -I. generate-costs.rb #{t.prerequisites.join(' ')} > #{t.name}"
 end
 

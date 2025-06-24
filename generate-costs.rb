@@ -12,18 +12,18 @@ class GenerateCosts < Logger::Application
 
   def run
 
-    requirements = JSON.parse(ARGF.read)['requirements']
-    scenarios = requirements.inject(Set.new) do |s, r|
-      s + r['configs'].map { |c| c['scenarios'] }.flatten
-    end.sort
-    log(Logger::DEBUG, "scenarios #{scenarios}")
-    n_scenarios = scenarios.length
+    input = JSON.parse(ARGF.read)
+    cost = {}
 
-    costs_hash = scenarios.inject(Hash.new) do |h, k|
-      h[k] = (c = (k.gsub(/\D+/, '').to_i) % n_scenarios) == 0 ? n_scenarios : c
-      h
+    input.each_value do |a|
+      a.each do |p|
+        cost[p['id']] = p['cost']
+      end
     end
-    puts JSON.pretty_generate(costs_hash)
+
+    puts JSON.pretty_generate(cost)
+
+    0
   end
 end
 
