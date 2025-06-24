@@ -34,12 +34,12 @@ class PruneTests < Logger::Application
 
       tests.each do |test|
         t_uuid = test['uuid']
-        config = test['scenairos']
+        config = Set.new(test['scenarios'])
         test_logged = false
 
         drop_quantities = []
         test['quantities'].each do |q_id, qh|
-          unless s_configs.include?(config)
+          unless s_configs.any? { |s_config| Set.new(s_config) == config }
             if qh['requirements'].include?(s_r_id)
               unless test_logged
                 log(Logger::INFO, "prune test #{t_uuid}")
