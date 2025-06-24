@@ -55,11 +55,20 @@ file 'configurations-graph.svg' => %w[configurations-graph.dot] do |t|
   system "dot -Tsvg #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Substitute scenario proxies.
+
+task :substitute_proxies => 'tests-proxied.json'
+
+file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
+  t.prerequisites.delete('proxy-map.json')
+  system "ruby substitute-proxies.rb --proxy-map proxy-map.json #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 # Prune tests using sufficiency assertions
 
 task :pruned_tests => 'tests-pruned.json'
 
-file 'tests-pruned.json' => %w[tests-raw.json sufficient.json] do |t|
+file 'tests-pruned.json' => %w[tests-proxied.json sufficient.json] do |t|
   t.prerequisites.delete('sufficient.json')
   system "ruby prune-tests.rb --sufficiency sufficient.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
