@@ -2,6 +2,7 @@
 
 require 'logger/application'
 require 'json'
+require 'optparse'
 
 TEN_MARKER = '.........|'
 
@@ -11,6 +12,17 @@ class VisualizePlan < Logger::Application
   end
 
   def run
+
+    options = {}
+    OptionParser.new do |opts|
+      opts.banner = "Usage: visualize-plan.rb [options]"
+      opts.on('-c COSTS', '--costs COSTS', 'scenario costs file')
+    end.parse!(into: options)
+
+    raise 'no costs file' unless options[:costs]
+
+    costs = JSON.parse(File.read(options[:costs]))
+
     js = JSON.parse(ARGF.read)
     tests = js['tests']
     scenarios = Set.new
@@ -23,7 +35,7 @@ class VisualizePlan < Logger::Application
     tens = (tests.length - rem) / 10
     puts '      ' + TEN_MARKER * tens + '.' * rem + ' changes'
 
-    ss = scenarios.sort_by { |s| s.gsub(/[^\d]+/, '\1').to_i }
+    ss = scenarios.sort_by {|s| costs[s] }
     ss.each do |scenario|
       label = "%5s " % scenario
       changes = 0

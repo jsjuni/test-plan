@@ -127,32 +127,38 @@ end
 
 task :unoptimized_visualizations => %w[tests-unoptimized-vis.txt tests-with-10-unoptimized-vis.txt tests-without-10-unoptimized-vis.txt]
 
-file 'tests-unoptimized-vis.txt' => 'tests-unoptimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-unoptimized-vis.txt' => %w[tests-unoptimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-unoptimized-vis.txt' => 'tests-with-10-unoptimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-with-10-unoptimized-vis.txt' => %w[tests-with-10-unoptimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-unoptimized-vis.txt' => 'tests-without-10-unoptimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-without-10-unoptimized-vis.txt' => %w[tests-without-10-unoptimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plan visualizations
 
 task :optimized_visualizations => %w[tests-optimized-vis.txt tests-with-10-optimized-vis.txt tests-without-10-optimized-vis.txt]
 
-file 'tests-optimized-vis.txt' => 'tests-optimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-optimized-vis.txt' => %w[tests-optimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-optimized-vis.txt' => 'tests-with-10-optimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-with-10-optimized-vis.txt' => %w[tests-with-10-optimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-optimized-vis.txt' => 'tests-without-10-optimized.json' do |t|
-  system "ruby -I. visualize-plan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-without-10-optimized-vis.txt' => %w[tests-without-10-optimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :test_docs => %w[tests-unoptimized.html tests-optimized.html]
