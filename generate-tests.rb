@@ -55,7 +55,6 @@ class GenerateTests < Logger::Application
     end
 
    path = g.vertices.to_a
-    proc_count = 0
     tests = []
     path.each do |ss|
       rqmts_direct = rqts_by_ss[ss]
@@ -74,7 +73,6 @@ class GenerateTests < Logger::Application
         s
       end
       tests << {
-        id: proc_count += 1,
         uuid: SecureRandom.uuid,
         scenarios: ss.to_a.sort,
         quantities: qh,

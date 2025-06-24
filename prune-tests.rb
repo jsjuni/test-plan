@@ -33,7 +33,7 @@ class PruneTests < Logger::Application
       drop_tests = []
 
       tests.each do |test|
-        t_id = test['id']
+        t_uuid = test['uuid']
         config = test['scenairos']
         test_logged = false
 
@@ -42,7 +42,7 @@ class PruneTests < Logger::Application
           unless s_configs.include?(config)
             if qh['requirements'].include?(s_r_id)
               unless test_logged
-                log(Logger::INFO, "prune test #{t_id}")
+                log(Logger::INFO, "prune test #{t_uuid}")
                 test_logged = true
               end
               log(Logger::INFO, "  drop requirement #{s_r_id}")
@@ -60,7 +60,7 @@ class PruneTests < Logger::Application
       end
 
       drop_tests.each do |drop_t|
-        log(Logger::INFO, "drop test #{drop_t['id']}")
+        log(Logger::INFO, "drop test #{drop_t['uuid']}")
         tests.delete(drop_t)
       end
     end
