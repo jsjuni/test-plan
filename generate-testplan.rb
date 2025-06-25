@@ -24,6 +24,7 @@ class GenerateTestplan < Logger::Application
     nc = tests.length
     ns = tests.inject(Set.new) { |s, t| s + t['scenarios'] }.length
     nq = tests.inject(Set.new) { |s, t| s + t['quantities'].keys }.length
+    no = tests.inject(0) { |s, t| s + t['quantities'].length }
     nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
     nsc = js['length']
 
@@ -53,6 +54,7 @@ class GenerateTestplan < Logger::Application
     puts "* Scenarios: #{ns}"
     puts "* Quantities: #{nq}"
     puts "* Configurations: #{nc}"
+    puts "* Observations: #{no}"
     puts "* Reconfiguration Costs: #{nsc} (#{"%.1f" % (nsc.to_f / nc)} per configuration)"
     puts
     puts 'A configuration is a unique combination of scenarios. There is one test for each configuration.'

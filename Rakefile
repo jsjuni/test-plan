@@ -69,6 +69,26 @@ file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
   system "ruby substitute-proxies.rb --proxy-map proxy-map.json --tests #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Generate (random) sufficiency assertions.
+
+task :sufficiency => %w[sufficient-least.json sufficient-most.json sufficient-random.json sufficient-none.json]
+
+file 'sufficient-least.json' => %w[requirements-summary-proxied.json] do |t|
+  system "ruby generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file 'sufficient-most.json' => %w[requirements-summary-proxied.json] do |t|
+  system "ruby generate-sufficiency.rb --p-least 0.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file 'sufficient-random.json' => %w[requirements-summary-proxied.json] do |t|
+  system "ruby generate-sufficiency.rb --p-least 0.5 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file 'sufficient-none.json' => %w[requirements-summary-proxied.json] do |t|
+  system "cat #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 # Prune tests using sufficiency assertions
 
 task :pruned_tests => 'tests-pruned.json'
