@@ -57,7 +57,12 @@ end
 
 # Substitute scenario proxies.
 
-task :substitute_proxies => 'tests-proxied.json'
+task :substitute_proxies => %w[requirements-summary-proxied.json tests-proxied.json]
+
+file 'requirements-summary-proxied.json' => %w[requirements-summary.json proxy-map.json] do |t|
+  t.prerequisites.delete('proxy-map.json')
+  system "ruby substitute-proxies.rb --proxy-map proxy-map.json --requirements-summary #{t.prerequisites.join(' ')} > #{t.name}"
+end
 
 file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
   t.prerequisites.delete('proxy-map.json')

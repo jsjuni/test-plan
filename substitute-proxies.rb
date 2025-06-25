@@ -18,7 +18,7 @@ class SubstituteProxies < Logger::Application
       else
         ns
       end
-    end
+    end.to_a
   end
 
   def run
@@ -43,16 +43,27 @@ class SubstituteProxies < Logger::Application
       }
     end
 
-    if proxy_t
-      tests = JSON.parse(ARGF.read)
+    data = JSON.parse(ARGF.read)
 
-      tests.each do |test|
+    if proxy_r
+
+      data.each do |requirement|
+        new_configs = requirement['configs'].map do |config|
+          substitute(proxies, config, requirement['id'])
+        end
+        requirement['configs'] = new_configs
+      end
+
+    elsif proxy_t
+
+      data.each do |test|
         new_scenarios = substitute(proxies, test['scenarios'], "test #{test['uuid']}")
         test['scenarios'] = new_scenarios.to_a
       end
 
-      puts JSON.pretty_generate(tests)
-    end
+   end
+
+    puts JSON.pretty_generate(data)
 
     0
   end
