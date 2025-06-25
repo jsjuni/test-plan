@@ -61,7 +61,7 @@ task :substitute_proxies => 'tests-proxied.json'
 
 file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
   t.prerequisites.delete('proxy-map.json')
-  system "ruby substitute-proxies.rb --proxy-map proxy-map.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby substitute-proxies.rb --proxy-map proxy-map.json --tests #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Prune tests using sufficiency assertions
