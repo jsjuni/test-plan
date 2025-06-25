@@ -94,17 +94,17 @@ end
 
 task :unoptimized_test_plans => %w[tests-unoptimized.json tests-with-10-unoptimized.json tests-without-10-unoptimized.json]
 
-file 'tests-unoptimized.json' => %w[costs.json tests-pruned.json] do |t|
+file 'tests-unoptimized.json' => %w[tests-pruned.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-unoptimized.json' => %w[tests-with-10.json] do |t|
+file 'tests-with-10-unoptimized.json' => %w[tests-with-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-unoptimized.json' => %w[tests-without-10.json] do |t|
+file 'tests-without-10-unoptimized.json' => %w[tests-without-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
@@ -113,17 +113,17 @@ end
 
 task :optimized_test_plans => %w[tests-optimized.json tests-with-10-optimized.json tests-without-10-optimized.json]
 
-file 'tests-optimized.json' => %w[tests-pruned.json] do |t|
+file 'tests-optimized.json' => %w[tests-pruned.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-optimized.json' => %w[tests-with-10.json] do |t|
+file 'tests-with-10-optimized.json' => %w[tests-with-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-optimized.json' => %w[tests-without-10.json] do |t|
+file 'tests-without-10-optimized.json' => %w[tests-without-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
