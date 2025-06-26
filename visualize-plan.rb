@@ -11,6 +11,20 @@ class VisualizePlan < Logger::Application
     super('visualize-plan')
   end
 
+  def compare(s1, s2, costs)
+    if (c1 = (costs[s1] <=> costs[s2])) == 0
+      prf1, ord1 = s1.split(/\./)
+      prf2, ord2 = s2.split(/\./)
+      if (c2 = (prf1 <=> prf2)) == 0
+        ord1.to_i <=> ord2.to_i
+      else
+        c2
+      end
+    else
+      c1
+    end
+  end
+
   def run
 
     options = {}
@@ -21,7 +35,7 @@ class VisualizePlan < Logger::Application
 
     raise 'no costs file' unless (cost_map_file = options['cost-map'.to_sym])
 
-    costs = JSON.parse(File.read(cost_map_file))
+    costs = JSON.parse(File.read(cost_map_file))['scenarios']
 
     js = JSON.parse(ARGF.read)
     tests = js['tests']
@@ -35,7 +49,8 @@ class VisualizePlan < Logger::Application
     tens = (tests.length - rem) / 10
     puts '      ' + TEN_MARKER * tens + '.' * rem + ' changes'
 
-    ss = scenarios.sort_by {|s| costs[s] }
+    ss = scenarios.sort { |s1, s2| self.compare(s1, s2, costs) }
+
     ss.each do |scenario|
       label = "%5s " % scenario
       changes = 0

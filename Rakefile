@@ -85,8 +85,9 @@ end
 # Re-proxy with different proxy map
 
 task :reproxy do
-  FileUtils.rm_f(%w[requirements-summary-proxied tests-proxied.json])
+  FileUtils.rm_f(%w[requirements-summary-proxied.json tests-proxied.json])
   Rake::Task[:substitute_proxies].invoke
+  Rake::Task[:sufficiency].invoke
 end
 
 # Generate (random) sufficiency assertions.
