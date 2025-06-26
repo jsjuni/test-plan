@@ -7,7 +7,6 @@ require 'optparse'
 N_REQUIREMENTS = 200.freeze
 P_2CONFIG = 0.1.freeze
 MAX_SCENARIOS = 5.freeze
-QUANTITIES = (1..50).to_a.freeze
 
 class GenerateRequirements < Logger::Application
 
@@ -21,9 +20,11 @@ class GenerateRequirements < Logger::Application
     options = {}
     OptionParser.new do |opts|
       opts.banner = "Usage: generate-requirements.rb [options]"
+      opts.on('-q QUANTITIES', '--quantities QUANTITIES', 'quantities JSON file')
       opts.on('-s SCENARIOS', '--scenarios SCENARIOS', 'scenarios JSON file')
     end.parse!(into: options)
 
+    all_quantities = JSON.parse(File.open(options[:quantities], 'r').read).map { |s| s['id'] }
     all_scenarios = JSON.parse(File.open(options[:scenarios], 'r').read)['scenarios'].map { |s| s['id'] }
 
     1.upto(N_REQUIREMENTS).each do |i|
@@ -37,7 +38,7 @@ class GenerateRequirements < Logger::Application
         }
         cl
       end
-     quantity = "Q.#{QUANTITIES.sample.to_s}"
+     quantity = all_quantities.sample
       @data[:requirements] << {id: id, configs: configs, quantity: quantity }
    end
     puts JSON.pretty_generate(@data)
