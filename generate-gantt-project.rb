@@ -29,7 +29,7 @@ class GenerateGanttProject < Logger::Application
     raise 'missing template file' unless (template_file = @options['template'.to_sym])
 
     log(Logger::INFO, "loading cost map")
-    cost_map = JSON.parse(File.read(cost_map_file))
+    cost_map = JSON.parse(File.read(cost_map_file))['scenarios']
 
     template = File.read(@options[:template])
     project = ProjectXML::Project.new(template)

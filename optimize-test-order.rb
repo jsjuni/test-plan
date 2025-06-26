@@ -45,7 +45,7 @@ class OptimizeTestOrder < Logger::Application
     raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
 
     log(Logger::INFO, "loading cost map")
-    cost_map = JSON.parse(File.read(cost_map_file))
+    cost_map = JSON.parse(File.read(cost_map_file))['scenarios']
     log(Logger::INFO, "loaded #{cost_map.length} cost map entries")
 
     tests = JSON.parse(ARGF.read)

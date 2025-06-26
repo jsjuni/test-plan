@@ -13,15 +13,15 @@ class GenerateCosts < Logger::Application
   def run
 
     input = JSON.parse(ARGF.read)
-    cost = {}
+    s_cost = {}
 
     input.each_value do |a|
       a.each do |p|
-        cost[p['id']] = p['cost']
+        s_cost[p['id']] = p['cost']
       end
     end
 
-    puts JSON.pretty_generate(cost)
+    puts JSON.pretty_generate({ scenarios: s_cost, observations: {} })
 
     0
   end

@@ -21,7 +21,7 @@ class VisualizePlan < Logger::Application
 
     raise 'no costs file' unless options[:costs]
 
-    costs = JSON.parse(File.read(options[:costs]))
+    costs = JSON.parse(File.read(options[:costs]))['scenarios']
 
     js = JSON.parse(ARGF.read)
     tests = js['tests']
