@@ -5,6 +5,7 @@ require 'json'
 
 SCENARIOS = (1..20).to_a.freeze
 PROXIES = (1..6).to_a.freeze
+COST_MAX = 20
 
 class GenerateScenarios < Logger::Application
 
@@ -13,18 +14,19 @@ class GenerateScenarios < Logger::Application
   end
 
   def run
+    srand(0)
     scenarios = []
     SCENARIOS.each do |s_ord|
       scenarios << {
         id: "S.#{s_ord}",
-        cost: s_ord
+        cost: (rand * COST_MAX).to_i + 1
       }
     end
     proxies = []
     PROXIES.each do |p_ord|
       proxies << {
         id: "PS.#{p_ord}",
-        cost: 2 * p_ord
+        cost: (rand * COST_MAX).to_i + 1
       }
     end
     result = { scenarios: scenarios, proxies: proxies }

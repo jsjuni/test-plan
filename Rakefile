@@ -102,7 +102,8 @@ end
 
 # Prune tests using sufficiency assertions
 
-task :pruned_tests => 'tests-pruned.json'
+task :pruned_tests => %w[tests-pruned.json]
+task :pruned_tests => :sufficiency
 
 file 'tests-pruned.json' => %w[tests-proxied.json sufficient.json] do |t|
   t.prerequisites.delete('sufficient.json')
@@ -212,7 +213,7 @@ end
 
 # Generate optimized test plan documents
 
-file 'tests-optimized.adoc' => %w[tests-unoptimized.json costs.json] do |t|
+file 'tests-optimized.adoc' => %w[tests-optimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
   system "ruby -I. generate-testplan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end

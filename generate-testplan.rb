@@ -65,9 +65,10 @@ class GenerateTestplan < Logger::Application
     puts "* Scenarios: #{ns}"
     puts "* Quantities: #{nq}"
     puts "* Configurations: #{nc}"
-    puts "* Reconfiguration Costs: #{nsc} (#{"%.1f" % (nsc.to_f / nc)} per configuration)"
+    puts "* Reconfiguration Costs: #{nsc}"
     puts "* Observations: #{no}"
     puts "* Observation Costs: #{oc}"
+    puts "* Total Costs: #{nsc + oc}"
     puts
     puts 'A configuration is a unique combination of scenarios. There is one test for each configuration.'
     puts 'During each test, all quantities constrained by any requirement that applies during any scenario'

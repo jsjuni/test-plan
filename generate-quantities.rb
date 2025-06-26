@@ -4,7 +4,7 @@ require 'logger/application'
 require 'json'
 
 QUANTITIES = (1..50).to_a.freeze
-COST_MAX = 20
+COST_MAX = 10
 
 class GenerateQuantities < Logger::Application
 
