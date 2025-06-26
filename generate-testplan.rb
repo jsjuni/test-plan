@@ -3,6 +3,7 @@
 require 'logger/application'
 require 'date'
 require 'json'
+require 'optparse'
 
 class String
   def serial
@@ -17,6 +18,15 @@ class GenerateTestplan < Logger::Application
   end
 
   def run
+    @options = {}
+    OptionParser.new(:req) do |parser|
+      parser.on('-c MAP', '--cost-map MAP', 'cost map')
+    end.parse!(into: @options)
+
+    raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
+
+    costs = JSON.parse(File.read(cost_map_file))['observations']
+
     js = JSON.parse(ARGF.read)
 
     tests = js['tests']
@@ -26,6 +36,7 @@ class GenerateTestplan < Logger::Application
     nq = tests.inject(Set.new) { |s, t| s + t['quantities'].keys }.length
     no = tests.inject(0) { |s, t| s + t['quantities'].length }
     nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
+    oc = tests.inject(0) { |s, t| s + t['quantities'].keys.map { |q| costs[q] }.sum }
     nsc = js['length']
 
     qty_by_rqt = { }
@@ -54,8 +65,9 @@ class GenerateTestplan < Logger::Application
     puts "* Scenarios: #{ns}"
     puts "* Quantities: #{nq}"
     puts "* Configurations: #{nc}"
-    puts "* Observations: #{no}"
     puts "* Reconfiguration Costs: #{nsc} (#{"%.1f" % (nsc.to_f / nc)} per configuration)"
+    puts "* Observations: #{no}"
+    puts "* Observation Costs: #{oc}"
     puts
     puts 'A configuration is a unique combination of scenarios. There is one test for each configuration.'
     puts 'During each test, all quantities constrained by any requirement that applies during any scenario'

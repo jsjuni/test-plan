@@ -16,12 +16,12 @@ class VisualizePlan < Logger::Application
     options = {}
     OptionParser.new do |opts|
       opts.banner = "Usage: visualize-plan.rb [options]"
-      opts.on('-c COSTS', '--costs COSTS', 'scenario costs file')
+      opts.on('-c COSTS', '--cost-map COSTS', 'scenario costs file')
     end.parse!(into: options)
 
-    raise 'no costs file' unless options[:costs]
+    raise 'no costs file' unless (cost_map_file = options['cost-map'.to_sym])
 
-    costs = JSON.parse(File.read(options[:costs]))['scenarios']
+    costs = JSON.parse(File.read(cost_map_file))
 
     js = JSON.parse(ARGF.read)
     tests = js['tests']

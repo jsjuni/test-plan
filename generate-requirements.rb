@@ -24,6 +24,9 @@ class GenerateRequirements < Logger::Application
       opts.on('-s SCENARIOS', '--scenarios SCENARIOS', 'scenarios JSON file')
     end.parse!(into: options)
 
+    raise 'no quantities file' unless options[:quantities]
+    raise 'no scenarios file' unless options[:scenarios]
+
     all_quantities = JSON.parse(File.open(options[:quantities], 'r').read).map { |s| s['id'] }
     all_scenarios = JSON.parse(File.open(options[:scenarios], 'r').read)['scenarios'].map { |s| s['id'] }
 

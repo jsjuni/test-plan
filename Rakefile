@@ -36,8 +36,10 @@ end
 
 task :costs => 'costs.json'
 
-file 'costs.json' => 'scenarios.json' do |t|
-  system "ruby -I. generate-costs.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'costs.json' => %w[quantities.json scenarios.json] do |t|
+  t.prerequisites.delete('quantities.json')
+  t.prerequisites.delete('scenarios.json')
+  system "ruby -I. generate-costs.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate raw tests
@@ -163,17 +165,17 @@ task :unoptimized_visualizations => %w[tests-unoptimized-vis.txt tests-with-10-u
 
 file 'tests-unoptimized-vis.txt' => %w[tests-unoptimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-with-10-unoptimized-vis.txt' => %w[tests-with-10-unoptimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-without-10-unoptimized-vis.txt' => %w[tests-without-10-unoptimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plan visualizations
@@ -182,25 +184,26 @@ task :optimized_visualizations => %w[tests-optimized-vis.txt tests-with-10-optim
 
 file 'tests-optimized-vis.txt' => %w[tests-optimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-with-10-optimized-vis.txt' => %w[tests-with-10-optimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-without-10-optimized-vis.txt' => %w[tests-without-10-optimized.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --costs costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :test_docs => %w[tests-unoptimized.html tests-optimized.html]
 
 # Generate unoptimized test document
 
-file 'tests-unoptimized.adoc' => 'tests-unoptimized.json' do |t|
-  system "ruby -I. generate-testplan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-unoptimized.adoc' => %w[tests-unoptimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. generate-testplan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-unoptimized.html' => 'tests-unoptimized.adoc' do |t|
@@ -209,8 +212,9 @@ end
 
 # Generate optimized test plan documents
 
-file 'tests-optimized.adoc' => 'tests-optimized.json' do |t|
-  system "ruby -I. generate-testplan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+file 'tests-optimized.adoc' => %w[tests-unoptimized.json costs.json] do |t|
+  t.prerequisites.delete('costs.json')
+  system "ruby -I. generate-testplan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-optimized.html' => 'tests-optimized.adoc' do |t|
