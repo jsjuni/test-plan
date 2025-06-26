@@ -3,6 +3,7 @@
 require 'logger/application'
 require 'json'
 require 'optparse'
+require 'securerandom'
 
 class SubstituteProxies < Logger::Application
 
@@ -19,6 +20,31 @@ class SubstituteProxies < Logger::Application
         ns
       end
     end.to_a
+  end
+
+  def merge_tests(tl)
+
+    quantities = tl.inject({}) do |qh, test|
+      test['quantities'].each do |tq, tqh|
+        if qh.has_key?(tq)
+          qh[tq]['requirements'] = (qh[tq]['requirements'] + tqh['requirements']).uniq.sort
+        else
+          qh[tq] = tqh
+        end
+      end
+      qh
+    end
+
+    uuid = SecureRandom.uuid
+    log(Logger::INFO, "merged test #{uuid}")
+    {
+      uuid: uuid,
+      scenarios: tl.first['scenarios'],
+      quantities: quantities,
+      requirements_direct: tl.flat_map { |test| test['requirements_direct'] }.uniq.sort,
+      quantities_direct: tl.flat_map { |test| test['quantities_direct'] }.uniq.sort
+    }
+
   end
 
   def run
@@ -47,23 +73,43 @@ class SubstituteProxies < Logger::Application
 
     if proxy_r
 
-      data.each do |requirement|
+      requirements = data
+
+      requirements.each do |requirement|
         new_configs = requirement['configs'].map do |config|
           substitute(proxies, config, requirement['id'])
         end
         requirement['configs'] = new_configs
       end
 
+      puts JSON.pretty_generate(requirements)
+
     elsif proxy_t
 
-      data.each do |test|
+      tests = data
+
+      tests.each do |test|
         new_scenarios = substitute(proxies, test['scenarios'], "test #{test['uuid']}")
         test['scenarios'] = new_scenarios.to_a
       end
 
-   end
+      sc_map = tests.inject(Hash.new { |h,k| h[k] = Set.new }) do |map, test|
+        map[test['scenarios'].hash] << test
+        map
+      end
 
-    puts JSON.pretty_generate(data)
+      new_tests = sc_map.inject([]) do |r, (sh, tl)|
+        if tl.length == 1
+          r << tl.first
+        else
+          r << merge_tests(tl)
+        end
+        r
+      end
+
+      puts JSON.pretty_generate(new_tests)
+
+    end
 
     0
   end

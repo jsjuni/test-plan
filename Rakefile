@@ -1,3 +1,5 @@
+require 'fileutils'
+
 task :default => %w[
   configurations_graph
   unoptimized_visualizations
@@ -80,6 +82,13 @@ file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
   system "ruby substitute-proxies.rb --proxy-map proxy-map.json --tests #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Re-proxy with different proxy map
+
+task :reproxy do
+  FileUtils.rm_f(%w[requirements-summary-proxied tests-proxied.json])
+  Rake::Task[:substitute_proxies].invoke
+end
+
 # Generate (random) sufficiency assertions.
 
 task :sufficiency => %w[sufficient-least.json sufficient-most.json sufficient-random.json sufficient-none.json]
@@ -108,6 +117,13 @@ task :pruned_tests => :sufficiency
 file 'tests-pruned.json' => %w[tests-proxied.json sufficient.json] do |t|
   t.prerequisites.delete('sufficient.json')
   system "ruby prune-tests.rb --sufficiency sufficient.json #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+# Re-prune with different sufficiency symlink
+
+task :reprune do
+  FileUtils.rm_f('tests-pruned.json')
+  Rake::Task[:pruned_tests].invoke
 end
 
 # Filter test subsets
