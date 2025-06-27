@@ -282,10 +282,6 @@ task :proxy_simple do
   reproxy('proxy-map-simple.json')
 end
 
-task :proxy_reducing do
-  reproxy('proxy-map-reducing.json')
-end
-
 # Convenience tasks for sufficiency.
 
 def reprune(sufficient_file)
