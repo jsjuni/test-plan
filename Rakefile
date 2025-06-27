@@ -34,6 +34,15 @@ file 'requirements.json' => %w[quantities.json scenarios.json] do |t|
   system "ruby -I. generate-requirements.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Substitute scenario proxies.
+
+task :substitute_proxies => %w[requirements-proxied.json]
+
+file 'requirements-proxied.json' => %w[requirements.json proxy-map.json] do |t|
+  t.prerequisites.delete('proxy-map.json')
+  system "ruby substitute-proxies.rb --proxy-map proxy-map.json #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 # Generate scaled cost map
 
 task :costs => 'costs.json'
@@ -46,9 +55,9 @@ end
 
 # Generate raw tests
 
-task :raw_tests => 'tests-raw.json'
+task :tests => 'tests.json'
 
-file 'tests-raw.json' => %w[requirements.json] do |t|
+file 'tests.json' => %w[requirements-proxied.json] do |t|
   system "ruby -I. generate-tests.rb --graph configurations-graph.json" +
          " --summary requirements-summary.json" +
          " #{t.prerequisites.join(' ')} > #{t.name}"
@@ -58,7 +67,7 @@ end
 
 task :configurations_graph => 'configurations-graph.svg'
 
-file 'configurations-graph.json' => %w[tests-raw.json]
+file 'configurations-graph.json' => %w[tests.json]
 
 file 'configurations-graph.dot' => %w[configurations-graph.json] do |t|
   system "ruby graph-to-dot.rb #{t.prerequisites.join(' ')} > #{t.name}"
@@ -66,20 +75,6 @@ end
 
 file 'configurations-graph.svg' => %w[configurations-graph.dot] do |t|
   system "dot -Tsvg #{t.prerequisites.join(' ')} > #{t.name}"
-end
-
-# Substitute scenario proxies.
-
-task :substitute_proxies => %w[requirements-summary-proxied.json tests-proxied.json]
-
-file 'requirements-summary-proxied.json' => %w[requirements-summary.json proxy-map.json] do |t|
-  t.prerequisites.delete('proxy-map.json')
-  system "ruby substitute-proxies.rb --proxy-map proxy-map.json --requirements-summary #{t.prerequisites.join(' ')} > #{t.name}"
-end
-
-file 'tests-proxied.json' => %w[tests-raw.json proxy-map.json] do |t|
-  t.prerequisites.delete('proxy-map.json')
-  system "ruby substitute-proxies.rb --proxy-map proxy-map.json --tests #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Re-proxy with different proxy map
