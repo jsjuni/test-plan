@@ -10,12 +10,13 @@ class GenerateSufficiency < Logger::Application
     super('generate-sufficiency')
   end
 
-  def prune_configs(mode, configs)
+  def prune_configs(mode, max, configs)
     lengths = configs.map { |c| c.length }
     max_length = lengths.max
     min_length = lengths.min
     select = (mode == :least) ? min_length : max_length
-    configs.select { |c| c.length == select }
+    candidates = configs.select { |c| c.length == select }
+    (max.nil? || candidates.length <= max) ? candidates : candidates.sample(max)
   end
 
   def run
@@ -24,6 +25,7 @@ class GenerateSufficiency < Logger::Application
     OptionParser.new do |opts|
       opts.banner = 'Usage: generate-sufficiency.rb [options]'
       opts.on('--p-least PROB', Numeric, 'probability of least restrictive sufficiency')
+      opts.on('-m MAX', '--max MAX', Integer, 'maximum number of configs')
       opts.on('--seed SEED', Integer, 'RNG seed')
     end.parse!(into: options)
 
@@ -38,7 +40,7 @@ class GenerateSufficiency < Logger::Application
     srand(options[:seed]) if options[:seed]
     data.each do |rh|
       mode = rand < p_least ? :least : :most
-      rh['configs'] = prune_configs(mode, rh['configs'])
+      rh['configs'] = prune_configs(mode, options[:max], rh['configs'])
     end
 
     puts JSON.pretty_generate(data)

@@ -92,14 +92,22 @@ end
 
 # Generate (random) sufficiency assertions.
 
-task :sufficient => %w[sufficient-least.json sufficient-most.json sufficient-random.json sufficient-none.json]
+task :sufficient => %w[sufficient-least.json sufficient-least-1.json sufficient-most.json sufficient-most-1.json sufficient-random.json sufficient-none.json]
 
 file 'sufficient-least.json' => %w[requirements-summary-proxied.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+file 'sufficient-least-1.json' => %w[requirements-summary-proxied.json] do |t|
+  system "ruby generate-sufficiency.rb --p-least 1.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 file 'sufficient-most.json' => %w[requirements-summary-proxied.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 0.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file 'sufficient-most-1.json' => %w[requirements-summary-proxied.json] do |t|
+  system "ruby generate-sufficiency.rb --p-least 0.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'sufficient-random.json' => %w[requirements-summary-proxied.json] do |t|
@@ -297,8 +305,16 @@ task :sufficient_least do
   reprune('sufficient-least.json')
 end
 
+task :sufficient_least_1 do
+  reprune('sufficient-least-1.json')
+end
+
 task :sufficient_most do
   reprune('sufficient-most.json')
+end
+
+task :sufficient_most_1 do
+  reprune('sufficient-most-1.json')
 end
 
 task :sufficient_random do
