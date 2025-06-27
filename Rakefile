@@ -87,12 +87,12 @@ end
 task :reproxy do
   FileUtils.rm_f(%w[requirements-summary-proxied.json tests-proxied.json])
   Rake::Task[:substitute_proxies].invoke
-  Rake::Task[:sufficiency].invoke
+  Rake::Task[:sufficient].invoke
 end
 
 # Generate (random) sufficiency assertions.
 
-task :sufficiency => %w[sufficient-least.json sufficient-most.json sufficient-random.json sufficient-none.json]
+task :sufficient => %w[sufficient-least.json sufficient-most.json sufficient-random.json sufficient-none.json]
 
 file 'sufficient-least.json' => %w[requirements-summary-proxied.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
@@ -113,7 +113,7 @@ end
 # Prune tests using sufficiency assertions
 
 task :pruned_tests => %w[tests-pruned.json]
-task :pruned_tests => :sufficiency
+task :pruned_tests => :sufficient
 
 file 'tests-pruned.json' => %w[tests-proxied.json sufficient.json] do |t|
   t.prerequisites.delete('sufficient.json')
@@ -259,4 +259,48 @@ task :progress_plot => 'test-campaign-progress.png'
 
 file 'test-campaign-progress.png' => %w[tests-unoptimized-schedule.gan tests-optimized-schedule.gan] do |t|
   system "Rscript plot-progress.R #{t.prerequisites.join(' ')} #{t.name}"
+end
+
+# Convenience tasks for proxies.
+
+def reproxy(proxy_file)
+  FileUtils.rm_f(%w[proxy-map.json])
+  FileUtils.ln_s(proxy_file, 'proxy-map.json')
+  Rake::Task[:reproxy].invoke
+end
+
+task :proxy_none do
+  reproxy('proxy-map-none.json')
+end
+
+task :proxy_simple do
+  reproxy('proxy-map-simple.json')
+end
+
+task :proxy_reducing do
+  reproxy('proxy-map-reducing.json')
+end
+
+# Convenience tasks for sufficiency.
+
+def reprune(sufficient_file)
+  FileUtils.rm_f(%w[sufficient.json])
+  FileUtils.ln_s(sufficient_file, 'sufficient.json')
+  Rake::Task[:reprune].invoke
+end
+
+task :sufficient_none do
+  reprune('sufficient-none.json')
+end
+
+task :sufficient_least do
+  reprune('sufficient-least.json')
+end
+
+task :sufficient_most do
+  reprune('sufficient-most.json')
+end
+
+task :sufficient_random do
+  reprune('sufficient-random.json')
 end
