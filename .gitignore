@@ -65,3 +65,4 @@ build-iPhoneSimulator/
 .Rhistory
 *.svg
 *.dot
+.DS_Store
