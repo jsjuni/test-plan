@@ -53,9 +53,11 @@ file 'costs.json' => %w[quantities.json scenarios.json] do |t|
   system "ruby -I. generate-costs.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-# Generate raw tests
+# Generate tests
 
 task :tests => 'tests.json'
+
+file 'requirements-summary.json' => %w[tests.json]
 
 file 'tests.json' => %w[requirements-proxied.json] do |t|
   system "ruby -I. generate-tests.rb --graph configurations-graph.json" +
@@ -80,7 +82,7 @@ end
 # Re-proxy with different proxy map
 
 task :reproxy do
-  FileUtils.rm_f(%w[requirements-summary-proxied.json tests-proxied.json])
+  FileUtils.rm_f(%w[requirements-proxied.json])
   Rake::Task[:substitute_proxies].invoke
   Rake::Task[:sufficient].invoke
 end
@@ -89,27 +91,27 @@ end
 
 task :sufficient => %w[sufficient-least.json sufficient-least-1.json sufficient-most.json sufficient-most-1.json sufficient-random.json sufficient-none.json]
 
-file 'sufficient-least.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-least.json' => %w[requirements-summary.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'sufficient-least-1.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-least-1.json' => %w[requirements-summary.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 1.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'sufficient-most.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-most.json' => %w[requirements-summary.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 0.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'sufficient-most-1.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-most-1.json' => %w[requirements-summary.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 0.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'sufficient-random.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-random.json' => %w[requirements-summary.json] do |t|
   system "ruby generate-sufficiency.rb --p-least 0.5 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'sufficient-none.json' => %w[requirements-summary-proxied.json] do |t|
+file 'sufficient-none.json' => %w[requirements-summary.json] do |t|
   system "cat #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
@@ -118,7 +120,7 @@ end
 task :pruned_tests => %w[tests-pruned.json]
 task :pruned_tests => :sufficient
 
-file 'tests-pruned.json' => %w[tests-proxied.json sufficient.json] do |t|
+file 'tests-pruned.json' => %w[tests.json sufficient.json] do |t|
   t.prerequisites.delete('sufficient.json')
   system "ruby prune-tests.rb --sufficiency sufficient.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
