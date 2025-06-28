@@ -55,6 +55,8 @@ class GenerateTestplan < Logger::Application
 
     puts '= Test Plan'
     puts 'Test Plan Author'
+    puts ":toc:"
+    puts ":toclevels: 2"
     puts "#{Date.today.to_s}"
     puts
     puts '== Overview'
@@ -89,10 +91,12 @@ class GenerateTestplan < Logger::Application
     puts
 
     tests.each do |test|
+      puts '[discrete]'
       puts "=== Test #{test['id']}"
       puts
       puts "Test UUID: #{test['uuid']}"
       puts
+      puts '[discrete]'
       puts '==== Configuration'
       puts
       puts 'Applicable scenarios:'
@@ -101,6 +105,7 @@ class GenerateTestplan < Logger::Application
         puts "* #{scenario}"
       end
       puts
+      puts '[discrete]'
       puts '==== Configuration Changes Before Test'
       puts
       unless (retract = test['retract']).empty?
@@ -120,6 +125,7 @@ class GenerateTestplan < Logger::Application
         puts
       end
       if test['final']
+        puts '[discrete]'
         puts '==== Configuration Changes After Test'
         puts
         puts 'Retract these scenarios:'
@@ -129,6 +135,7 @@ class GenerateTestplan < Logger::Application
         end
         puts
       end
+      puts '[discrete]'
       puts '==== Requirements in Scope'
       puts
       test['quantities'].values.map { |v| v['requirements'] }.flatten.uniq.sort_by(&:serial).each do |req|
@@ -136,6 +143,7 @@ class GenerateTestplan < Logger::Application
         puts "* #{req}#{direct}"
       end
       puts
+      puts '[discrete]'
       puts '==== Observations'
       puts
       puts 'Record observations of these quantities:'
