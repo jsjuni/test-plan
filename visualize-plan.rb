@@ -44,7 +44,7 @@ class VisualizePlan < Logger::Application
       scenarios += t['scenarios']
     end
 
-    puts "length: #{js['length']}"
+    puts "cost: #{js['cost']}"
     rem = tests.length % 10
     tens = (tests.length - rem) / 10
     puts '      ' + TEN_MARKER * tens + '.' * rem + ' changes'

@@ -37,7 +37,7 @@ class GenerateTestplan < Logger::Application
     no = tests.inject(0) { |s, t| s + t['quantities'].length }
     nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
     oc = tests.inject(0) { |s, t| s + t['quantities'].keys.map { |q| costs[q] }.sum }
-    nsc = js['length']
+    rc = js['cost']
 
     qty_by_rqt = { }
     test_abbrevs_by_qty = Hash.new { |h, k| h[k] = Set.new }
@@ -67,10 +67,10 @@ class GenerateTestplan < Logger::Application
     puts "* Scenarios: #{ns}"
     puts "* Quantities: #{nq}"
     puts "* Configurations: #{nc}"
-    puts "* Reconfiguration Costs: #{nsc}"
+    puts "* Reconfiguration Costs: #{rc}"
     puts "* Observations: #{no}"
     puts "* Observation Costs: #{oc}"
-    puts "* Total Costs: #{nsc + oc}"
+    puts "* Total Costs: #{rc + oc}"
     puts
     puts 'A configuration is a unique combination of scenarios. There is one test for each configuration.'
     puts 'During each test, all quantities constrained by any requirement that applies during any scenario'

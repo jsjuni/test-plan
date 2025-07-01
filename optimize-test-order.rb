@@ -7,31 +7,24 @@ require 'rgl/transitivity'
 require 'TSP_2opt'
 require 'optparse'
 
-class TestCircuit < TSP::Path
-
-  def initialize(array, cost_map)
-    @cost_map = cost_map
-    a = array.dup.unshift({ 'id' => 0, 'scenarios' => [] })
-    super(a)
-  end
-
-  def distance(i, j)
-    si = at(i)['scenarios']
-    sj = at(j)['scenarios']
-    apply = sj - si
-    retract = si - sj
-    (apply + retract).inject(0) { |s, e| s + @cost_map[e.to_s] }
-  end
-
-end
-
 class OptimizeTestOrder < Logger::Application
 
   def initialize
     super('optimize-test-order')
-
     logger.level = Logger::INFO
   end
+
+  def make_weights(tests, cost_map)
+    0.upto(tests.length - 1).inject([]) do |a, i|
+      si = tests[i]['scenarios']
+      a << 0.upto(i).map do |j|
+        sj = tests[j]['scenarios']
+        apply = sj - si
+        retract = si - sj
+        (apply + retract).inject(0) { |s, e| s + cost_map[e.to_s] }
+      end
+      a
+    end  end
 
   def run
 
@@ -44,46 +37,46 @@ class OptimizeTestOrder < Logger::Application
     end.parse!(into: @options)
 
     raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
+    raise '--no-optimize invalid with --concorde' if !@options[:optimize] && @options[:concorde]
 
     log(Logger::INFO, "loading cost map")
     cost_map = JSON.parse(File.read(cost_map_file))['scenarios']
     log(Logger::INFO, "loaded #{cost_map.length} cost map entries")
 
-    tests = JSON.parse(ARGF.read)
-    path = TestCircuit.new(@options[:resort] ? tests.sort_by { rand } : tests, cost_map)
+    t = JSON.parse(ARGF.read)
+    tests = (@options[:resort] ? t.sort_by { rand } : t.dup).unshift({ 'id' => 0, 'scenarios' => [] })
+    weights = make_weights(tests, cost_map)
 
-    tsp = TSP::TSP_2opt.new(path)
-    log(Logger::INFO, "initial order path length: #{tsp.length}")
-
-    if @options[:optimize]
-      if @options[:concorde]
-        require 'concorde'
-        require 'tsplib'
-        concorde_spec = TSPLIB::TSP.new('tests', 'tests', tests.length + 1)
-        0.upto(concorde_spec.dimension - 1) do |i|
-          0.upto(i) do |j|
-            concorde_spec.weight[i][j] = path.distance(i, j)
-          end
+    if @options[:concorde]
+      require 'concorde'
+      require 'tsplib'
+      concorde_spec = TSPLIB::TSP.new('tests', 'tests', tests.length)
+      0.upto(concorde_spec.dimension - 1) do |i|
+        0.upto(i) do |j|
+          concorde_spec.weight[i][j] = weights[i][j]
         end
-        concorde = Concorde.new(concorde_spec)
-        order = concorde.run
-        log(Logger::INFO, "result length: #{order.length}")
-        result = TSP::TSP_2opt.new(TestCircuit.new(order.drop(1).map { |i| path[i] }, cost_map))
-      else
-        result = tsp.optimize
       end
+      concorde = Concorde.new(concorde_spec)
+      concorde.optimize
+      tour = concorde.tour
+      cost = concorde.cost
     else
-      result = tsp
+      tsp = ::TSP_2opt.new(weights)
+      log(Logger::INFO, "initial tour cost: #{tsp.cost}")
+      tsp.optimize if @options[:optimize]
+      tour = tsp.tour
+      cost = tsp.cost
     end
 
-    log(Logger::INFO, "optimized order path length: #{result.length}")
+    log(Logger::INFO, "optimized tour cost: #{cost}")
 
-    init = result.path.find_index { |t| t['id'] == 0 }
-    path = (init ==  0) ? result.path : result.path[init..-1] + result.path[0...(init - 1)]
+    init = tour.find_index { |t| tests[t]['id'] == 0 }
+    order = (init == 0) ? tour : tour[init..-1] + tour[0...(init - 1)]
+    tests_tour = order.map { |i| tests[i] }
 
     opt_tests = []
     test_count = 0
-    while (pair = path.take(2)).length == 2 do
+    while (pair = tests_tour.take(2)).length == 2 do
       retract = pair[0]['scenarios'] - pair[1]['scenarios']
       apply = pair[1]['scenarios'] - pair[0]['scenarios']
       opt_tests << pair[1].merge(
@@ -92,10 +85,10 @@ class OptimizeTestOrder < Logger::Application
         'retract' => retract.to_a.sort,
         'apply' => apply.to_a.sort
       )
-      path.shift
+      tests_tour.shift
     end
     log(Logger::INFO, "emitting #{opt_tests.length} test configurations")
-    puts JSON.pretty_generate({length: result.length, tests: opt_tests})
+    puts JSON.pretty_generate({cost: cost, tests: opt_tests})
     0
   end
 
