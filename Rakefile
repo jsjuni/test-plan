@@ -174,17 +174,17 @@ task :optimized_test_plans => %w[tests-optimized.json tests-with-10-optimized.js
 
 file 'tests-optimized.json' => %w[tests-pruned.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. optimize-test-order.rb --cost-map costs.json --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-with-10-optimized.json' => %w[tests-with-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. optimize-test-order.rb --cost-map costs.json --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file 'tests-without-10-optimized.json' => %w[tests-without-10.json costs.json] do |t|
   t.prerequisites.delete('costs.json')
-  system "ruby -I. optimize-test-order.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. optimize-test-order.rb --cost-map costs.json --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate unoptimized test plan visualizations

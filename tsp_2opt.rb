@@ -64,6 +64,7 @@ module TSP
           end
         end
       end
+      self
     end
   end
 

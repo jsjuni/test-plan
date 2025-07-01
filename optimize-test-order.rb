@@ -40,6 +40,7 @@ class OptimizeTestOrder < Logger::Application
       parser.on('-c MAP', '--cost-map MAP', 'cost map')
       parser.on('--[no-]optimize', 'optimize test order')
       parser.on('-r', '--resort', 'resort test order randomly')
+      parser.on('--concorde', 'use concorde solver')
     end.parse!(into: @options)
 
     raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
@@ -50,14 +51,36 @@ class OptimizeTestOrder < Logger::Application
 
     tests = JSON.parse(ARGF.read)
     path = TestCircuit.new(@options[:resort] ? tests.sort_by { rand } : tests, cost_map)
+
     tsp = TSP::TSP_2opt.new(path)
     log(Logger::INFO, "initial order path length: #{tsp.length}")
-    tsp.optimize if @options[:optimize]
-    log(Logger::INFO, "optimized order path length: #{tsp.length}")
+
+    if @options[:optimize]
+      if @options[:concorde]
+        require 'concorde'
+        require 'tsplib'
+        concorde_spec = TSPLIB::TSP.new('tests', 'tests', tests.length + 1)
+        0.upto(concorde_spec.dimension - 1) do |i|
+          0.upto(i) do |j|
+            concorde_spec.weight[i][j] = path.distance(i, j)
+          end
+        end
+        concorde = Concorde.new(concorde_spec)
+        order = concorde.run
+        log(Logger::INFO, "result length: #{order.length}")
+        result = TSP::TSP_2opt.new(TestCircuit.new(order.drop(1).map { |i| path[i] }, cost_map))
+      else
+        result = tsp.optimize
+      end
+    else
+      result = tsp
+    end
+
+    log(Logger::INFO, "optimized order path length: #{result.length}")
 
     opt_tests = []
     test_count = 0
-    while (pair = tsp.path.take(2)).length == 2 do
+    while (pair = result.path.take(2)).length == 2 do
       retract = pair[0]['scenarios'] - pair[1]['scenarios']
       apply = pair[1]['scenarios'] - pair[0]['scenarios']
       opt_tests << pair[1].merge(
@@ -66,10 +89,10 @@ class OptimizeTestOrder < Logger::Application
         'retract' => retract.to_a.sort,
         'apply' => apply.to_a.sort
       )
-      tsp.path.shift
+      result.path.shift
     end
     log(Logger::INFO, "emitting #{opt_tests.length} test configurations")
-    puts JSON.pretty_generate({length: tsp.length, tests: opt_tests})
+    puts JSON.pretty_generate({length: result.length, tests: opt_tests})
     0
   end
 
