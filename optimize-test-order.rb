@@ -78,9 +78,12 @@ class OptimizeTestOrder < Logger::Application
 
     log(Logger::INFO, "optimized order path length: #{result.length}")
 
+    init = result.path.find_index { |t| t['id'] == 0 }
+    path = (init ==  0) ? result.path : result.path[init..-1] + result.path[0...(init - 1)]
+
     opt_tests = []
     test_count = 0
-    while (pair = result.path.take(2)).length == 2 do
+    while (pair = path.take(2)).length == 2 do
       retract = pair[0]['scenarios'] - pair[1]['scenarios']
       apply = pair[1]['scenarios'] - pair[0]['scenarios']
       opt_tests << pair[1].merge(
@@ -89,7 +92,7 @@ class OptimizeTestOrder < Logger::Application
         'retract' => retract.to_a.sort,
         'apply' => apply.to_a.sort
       )
-      result.path.shift
+      path.shift
     end
     log(Logger::INFO, "emitting #{opt_tests.length} test configurations")
     puts JSON.pretty_generate({length: result.length, tests: opt_tests})
