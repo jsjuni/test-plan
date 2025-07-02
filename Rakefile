@@ -1,5 +1,10 @@
 require 'fileutils'
 
+BIN_DIR = 'bin'
+BUILD_DIR = 'build'
+LIB_DIR = 'lib'
+RESOURCES_DIR = 'resources'
+
 task :default => %w[
   configurations_graph
   unoptimized_visualizations
@@ -10,46 +15,51 @@ task :default => %w[
 
 # Generate quantities
 
-task :quantities => 'quantities.json'
+quantities_json = "#{BUILD_DIR}/quantities.json"
+task :quantities => quantities_json
 
-file 'quantities.json' do |t|
+file quantities_json do |t|
   system "ruby generate-quantities.rb > #{t.name}"
 end
 
 # Generate scenarios
 
-task :scenarios => 'scenarios.json'
+scenarios_json = "#{BUILD_DIR}/scenarios.json"
+task :scenarios => scenarios_json
 
-file 'scenarios.json' do |t|
+file scenarios_json do |t|
   system "ruby generate-scenarios.rb > #{t.name}"
 end
 
 # Generate requirements
 
-task :requirements => 'requirements.json'
+requirements_json = "#{BUILD_DIR}/requirements.json"
+task :requirements => requirements_json
 
-file 'requirements.json' => %w[quantities.json scenarios.json] do |t|
-  t.prerequisites.delete('quantities.json')
-  t.prerequisites.delete('scenarios.json')
+file requirements_json => [quantities_json, scenarios_json] do |t|
+  t.prerequisites.delete(quantities_json)
+  t.prerequisites.delete(scenarios_json)
   system "ruby -I. generate-requirements.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Substitute scenario proxies.
 
-task :substitute_proxies => %w[requirements-proxied.json]
+requirements_proxied_json = "#{BUILD_DIR}/requirements_proxied.json"
+proxy_map_json = "#{BUILD_DIR}/proxy-map.json"
+task :substitute_proxies => requirements_proxied_json
 
-file 'requirements-proxied.json' => %w[requirements.json proxy-map.json] do |t|
-  t.prerequisites.delete('proxy-map.json')
-  system "ruby substitute-proxies.rb --proxy-map proxy-map.json #{t.prerequisites.join(' ')} > #{t.name}"
+file requirements_proxied_json => [requirements_json, proxy_map_json] do |t|
+  t.prerequisites.delete(proxy_map_json)
+  system "ruby substitute-proxies.rb --proxy-map #{proxy_map_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate scaled cost map
 
 task :costs => 'costs.json'
 
-file 'costs.json' => %w[quantities.json scenarios.json] do |t|
-  t.prerequisites.delete('quantities.json')
-  t.prerequisites.delete('scenarios.json')
+file 'costs.json' => [quantities_json, scenarios_json]  do |t|
+  t.prerequisites.delete(quantities_json)
+  t.prerequisites.delete(scenarios_json)
   system "ruby -I. generate-costs.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
