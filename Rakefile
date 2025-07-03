@@ -13,12 +13,20 @@ task :default => %w[
   schedules
 ]
 
+file BUILD_DIR do
+  Dir.mkdir(BUILD_DIR) unless Dir.exist?(BUILD_DIR)
+end
+
+task :clean do
+  FileUtils.rm_rf(BUILD_DIR)
+end
+
 # Generate quantities
 
 quantities_json = "#{BUILD_DIR}/quantities.json"
 task :quantities => quantities_json
 
-file quantities_json do |t|
+file quantities_json => [BUILD_DIR] do |t|
   system "ruby generate-quantities.rb > #{t.name}"
 end
 
@@ -39,7 +47,7 @@ task :requirements => requirements_json
 file requirements_json => [quantities_json, scenarios_json] do |t|
   t.prerequisites.delete(quantities_json)
   t.prerequisites.delete(scenarios_json)
-  system "ruby -I. generate-requirements.rb --quantities quantities.json --scenarios scenarios.json #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -I. generate-requirements.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Substitute scenario proxies.
@@ -73,7 +81,7 @@ configurations_graph_json = "#{BUILD_DIR}/configurations.json"
 file configurations_graph_json => requirements_proxied_json
 
 requirements_summary_json = "#{BUILD_DIR}/requirements-summary.json"
-file requirements_summary_json => requirements_proxied_json
+file requirements_summary_json => tests_json
 
 file tests_json => [requirements_proxied_json] do |t|
   system "ruby -I. generate-tests.rb --graph #{configurations_graph_json}" +
@@ -336,12 +344,12 @@ def reproxy(proxy_file, symlink)
 end
 
 proxy_map_none_json = "#{RESOURCES_DIR}/proxy-map-none.json"
-task :proxy_none do
+task :proxy_none => [BUILD_DIR] do
   reproxy(proxy_map_none_json, proxy_map_json)
 end
 
 proxy_map_simple_json = "#{RESOURCES_DIR}/proxy-map-simple.json"
-task :proxy_simple do
+task :proxy_simple => [BUILD_DIR] do
   reproxy(proxy_map_simple_json, proxy_map_json)
 end
 
