@@ -19,6 +19,7 @@ end
 
 task :clean do
   FileUtils.rm_rf(BUILD_DIR)
+  Rake::Task[BUILD_DIR].invoke
 end
 
 # Generate quantities
@@ -26,7 +27,7 @@ end
 quantities_json = "#{BUILD_DIR}/quantities.json"
 task :quantities => quantities_json
 
-file quantities_json => [BUILD_DIR] do |t|
+file quantities_json do |t|
   system "ruby generate-quantities.rb > #{t.name}"
 end
 
@@ -344,12 +345,12 @@ def reproxy(proxy_file, symlink)
 end
 
 proxy_map_none_json = "#{RESOURCES_DIR}/proxy-map-none.json"
-task :proxy_none => [BUILD_DIR] do
+task :proxy_none do
   reproxy(proxy_map_none_json, proxy_map_json)
 end
 
 proxy_map_simple_json = "#{RESOURCES_DIR}/proxy-map-simple.json"
-task :proxy_simple => [BUILD_DIR] do
+task :proxy_simple do
   reproxy(proxy_map_simple_json, proxy_map_json)
 end
 
