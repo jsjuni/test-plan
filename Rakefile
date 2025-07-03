@@ -267,7 +267,9 @@ file tests_without_10_optimized_vis_txt => [tests_without_10_optimized_json, cos
   system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-task :test_docs => %w[tests-unoptimized.html tests-optimized.html]
+tests_unoptimized_html = "#{BUILD_DIR}/tests-unoptimized.html"
+tests_optimized_html = "#{BUILD_DIR}/tests-optimized.html"
+task :test_docs => [tests_unoptimized_html, tests_optimized_html]
 
 # Generate unoptimized test document
 
@@ -277,7 +279,6 @@ file tests_unoptimized_adoc => [tests_unoptimized_json, costs_json] do |t|
   system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-tests_unoptimized_html = "#{BUILD_DIR}/tests-unoptimized.html"
 task :unoptimized_documents => [tests_unoptimized_html]
 file tests_unoptimized_html => tests_unoptimized_adoc do |t|
   system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
@@ -291,7 +292,6 @@ file tests_optimized_adoc => [tests_optimized_json, costs_json] do |t|
   system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-tests_optimized_html = "#{BUILD_DIR}/tests-optimized.html"
 task :optimized_documents => [tests_optimized_html]
 file tests_optimized_html => tests_optimized_adoc do |t|
   system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
@@ -329,25 +329,27 @@ end
 
 # Convenience tasks for proxies.
 
-def reproxy(proxy_file)
-  FileUtils.rm_f(%w[proxy-map.json])
-  FileUtils.ln_s(proxy_file, 'proxy-map.json')
+def reproxy(proxy_file, symlink)
+  FileUtils.rm_f([symlink])
+  FileUtils.ln_s("../#{proxy_file}", symlink)
   Rake::Task[:reproxy].invoke
 end
 
+proxy_map_none_json = "#{RESOURCES_DIR}/proxy-map-none.json"
 task :proxy_none do
-  reproxy('proxy-map-none.json')
+  reproxy(proxy_map_none_json, proxy_map_json)
 end
 
+proxy_map_simple_json = "#{RESOURCES_DIR}/proxy-map-simple.json"
 task :proxy_simple do
-  reproxy('proxy-map-simple.json')
+  reproxy(proxy_map_simple_json, proxy_map_json)
 end
 
 # Convenience tasks for sufficiency.
 
-def reprune(sufficient_file, sl)
-  FileUtils.rm_f([sl])
-  FileUtils.ln_s(File.basename(sufficient_file), sl)
+def reprune(sufficient_file, symlink)
+  FileUtils.rm_f([symlink])
+  FileUtils.ln_s(File.basename(sufficient_file), symlink)
   Rake::Task[:reprune].invoke
 end
 
