@@ -299,23 +299,31 @@ end
 
 # Generate GanttProject files
 
-task :schedules => %w[tests-unoptimized-schedule.xml tests-optimized-schedule.xml]
+tests_unoptimized_schedule_xml = "#{BUILD_DIR}/tests-unoptimized-schedule.xml"
+tests_optimized_schedule_xml = "#{BUILD_DIR}/tests-optimized-schedule.xml"
+gantt_project_xml = "#{RESOURCES_DIR}/GanttProject.xml"
+task :schedules => [tests_unoptimized_schedule_xml, tests_optimized_schedule_xml]
 
-file 'tests-unoptimized-schedule.xml' => %w[costs.json tests_unoptimized_json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. generate-gantt-project.rb --cost-map costs.json --template GanttProject.xml #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_unoptimized_schedule_xml => [tests_unoptimized_json, costs_json, gantt_project_xml] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(gantt_project_xml)
+  system "ruby -I. generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-optimized-schedule.xml' => %w[costs.json tests-optimized.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. generate-gantt-project.rb --cost-map costs.json --template GanttProject.xml #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_optimized_schedule_xml => [tests_optimized_json, costs_json, gantt_project_xml] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(gantt_project_xml)
+  system "ruby -I. generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate progress plot
 
-task :progress_plot => 'test-campaign-progress.png'
+tests_unoptimized_schedule_gan = "#{BUILD_DIR}/tests-unoptimized-schedule.gan"
+tests_optimized_schedule_gan = "#{BUILD_DIR}/tests-optimized-schedule.gan"
+test_campaign_progress_png = "#{BUILD_DIR}/test-campaign-progress.png"
+task :progress_plot => test_campaign_progress_png
 
-file 'test-campaign-progress.png' => %w[tests-unoptimized-schedule.gan tests-optimized-schedule.gan] do |t|
+file test_campaign_progress_png => [tests_unoptimized_schedule_gan, tests_optimized_schedule_gan] do |t|
   system "Rscript plot-progress.R #{t.prerequisites.join(' ')} #{t.name}"
 end
 
