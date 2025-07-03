@@ -225,63 +225,75 @@ end
 
 # Generate unoptimized test plan visualizations
 
-task :unoptimized_visualizations => %w[tests-unoptimized-vis.txt tests-with-10-unoptimized-vis.txt tests-without-10-unoptimized-vis.txt]
+tests_unoptimized_vis_txt = "#{BUILD_DIR}/tests-unoptimized-vis.txt"
+tests_with_10_unoptimized_vis_txt = "#{BUILD_DIR}/tests-with-10-unoptimized-vis.txt"
+tests_without_10_unoptimized_vis_txt = "#{BUILD_DIR}/tests-without-10-unoptimized-vis.txt"
+task :unoptimized_visualizations => [tests_unoptimized_vis_txt, tests_with_10_unoptimized_vis_txt, tests_without_10_unoptimized_vis_txt]
 
-file 'tests-unoptimized-vis.txt' => %w[tests_unoptimized_json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_unoptimized_vis_txt => [tests_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-unoptimized-vis.txt' => %w[tests_with_10_unoptimized_json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_with_10_unoptimized_vis_txt => [tests_with_10_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-unoptimized-vis.txt' => %w[tests_without_10_unoptimized_json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_without_10_unoptimized_vis_txt => [tests_without_10_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plan visualizations
 
-task :optimized_visualizations => %w[tests-optimized-vis.txt tests-with-10-optimized-vis.txt tests-without-10-optimized-vis.txt]
+tests_optimized_vis_txt = "#{BUILD_DIR}/tests-optimized-vis.txt"
+tests_with_10_optimized_vis_txt = "#{BUILD_DIR}/tests-with-10-optimized-vis.txt"
+tests_without_10_optimized_vis_txt = "#{BUILD_DIR}/tests-without-10-optimized-vis.txt"
+task :optimized_visualizations => [tests_optimized_vis_txt, tests_with_10_optimized_vis_txt, tests_without_10_optimized_vis_txt]
 
-file 'tests-optimized-vis.txt' => %w[tests-optimized.json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_optimized_vis_txt => [tests_optimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-with-10-optimized-vis.txt' => %w[tests-with-10-optimized.json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_with_10_optimized_vis_txt => [tests_with_10_optimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-without-10-optimized-vis.txt' => %w[tests-without-10-optimized.json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. visualize-plan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+file tests_without_10_optimized_vis_txt => [tests_without_10_optimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :test_docs => %w[tests-unoptimized.html tests-optimized.html]
 
 # Generate unoptimized test document
 
-file 'tests-unoptimized.adoc' => %w[tests_unoptimized_json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. generate-testplan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+tests_unoptimized_adoc = "#{BUILD_DIR}/tests-unoptimized.adoc"
+file tests_unoptimized_adoc => [tests_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-unoptimized.html' => 'tests-unoptimized.adoc' do |t|
+tests_unoptimized_html = "#{BUILD_DIR}/tests-unoptimized.html"
+task :unoptimized_documents => [tests_unoptimized_html]
+file tests_unoptimized_html => tests_unoptimized_adoc do |t|
   system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plan documents
 
-file 'tests-optimized.adoc' => %w[tests-optimized.json costs.json] do |t|
-  t.prerequisites.delete('costs.json')
-  system "ruby -I. generate-testplan.rb --cost-map costs.json #{t.prerequisites.join(' ')} > #{t.name}"
+tests_optimized_adoc = "#{BUILD_DIR}/tests-optimized.adoc"
+file tests_optimized_adoc => [tests_optimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-file 'tests-optimized.html' => 'tests-optimized.adoc' do |t|
+tests_optimized_html = "#{BUILD_DIR}/tests-optimized.html"
+task :optimized_documents => [tests_optimized_html]
+file tests_optimized_html => tests_optimized_adoc do |t|
   system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
