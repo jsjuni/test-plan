@@ -28,7 +28,7 @@ quantities_json = "#{BUILD_DIR}/quantities.json"
 task :quantities => quantities_json
 
 file quantities_json do |t|
-  system "ruby generate-quantities.rb > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-quantities.rb > #{t.name}"
 end
 
 # Generate scenarios
@@ -37,7 +37,7 @@ scenarios_json = "#{BUILD_DIR}/scenarios.json"
 task :scenarios => scenarios_json
 
 file scenarios_json do |t|
-  system "ruby generate-scenarios.rb > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-scenarios.rb > #{t.name}"
 end
 
 # Generate requirements
@@ -48,7 +48,7 @@ task :requirements => requirements_json
 file requirements_json => [quantities_json, scenarios_json] do |t|
   t.prerequisites.delete(quantities_json)
   t.prerequisites.delete(scenarios_json)
-  system "ruby -I. generate-requirements.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-requirements.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Substitute scenario proxies.
@@ -59,7 +59,7 @@ task :substitute_proxies => requirements_proxied_json
 
 file requirements_proxied_json => [requirements_json, proxy_map_json] do |t|
   t.prerequisites.delete(proxy_map_json)
-  system "ruby substitute-proxies.rb --proxy-map #{proxy_map_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/substitute-proxies.rb --proxy-map #{proxy_map_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate scaled cost map
@@ -70,7 +70,7 @@ task :costs => costs_json
 file costs_json => [quantities_json, scenarios_json]  do |t|
   t.prerequisites.delete(quantities_json)
   t.prerequisites.delete(scenarios_json)
-  system "ruby -I. generate-costs.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-costs.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate tests
@@ -85,7 +85,7 @@ requirements_summary_json = "#{BUILD_DIR}/requirements-summary.json"
 file requirements_summary_json => tests_json
 
 file tests_json => [requirements_proxied_json] do |t|
-  system "ruby -I. generate-tests.rb --graph #{configurations_graph_json}" +
+  system "ruby -Ilib #{BIN_DIR}/generate-tests.rb --graph #{configurations_graph_json}" +
          " --summary #{requirements_summary_json}" +
          " #{t.prerequisites.join(' ')} > #{t.name}"
 end
@@ -95,7 +95,7 @@ end
 configurations_graph_dot = "#{BUILD_DIR}/configurations.dot"
 
 file configurations_graph_dot => [configurations_graph_json] do |t|
-  system "ruby graph-to-dot.rb #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/graph-to-dot.rb #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 configurations_graph_svg = "#{BUILD_DIR}/configurations.svg"
@@ -128,27 +128,27 @@ task :sufficient => [sufficient_least_json, sufficient_least_1_json, sufficient_
                         sufficient_random_json, sufficient_random_1_json, sufficient_none_json]
 
 file sufficient_least_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 1.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_least_1_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 1.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 1.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_most_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 0.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 0.0 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_most_1_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 0.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 0.0 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_random_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 0.5 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 0.5 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_random_1_json => [requirements_summary_json] do |t|
-  system "ruby generate-sufficiency.rb --p-least 0.5 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-sufficiency.rb --p-least 0.5 --max 1 --seed 0 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file sufficient_none_json => [requirements_summary_json] do |t|
@@ -163,7 +163,7 @@ task :pruned_tests => :sufficient
 
 file tests_pruned_json => [tests_json, sufficient_json] do |t|
   t.prerequisites.delete(sufficient_json)
-  system "ruby prune-tests.rb --sufficiency #{sufficient_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby #{BIN_DIR}/prune-tests.rb --sufficiency #{sufficient_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Re-prune with different sufficiency symlink
@@ -180,11 +180,11 @@ tests_without_10_json = "#{BUILD_DIR}/tests-without-10.json"
 task :filter_tests => [tests_with_10_json, tests_without_10_json]
 
 file tests_with_10_json => [tests_pruned_json] do |t|
-  system "ruby -I. filter-tests.rb -w S.10 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/filter-tests.rb -w S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_without_10_json => [tests_pruned_json] do |t|
-  system "ruby -I. filter-tests.rb -x S.10 #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/filter-tests.rb -x S.10 #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate unoptimized test plans
@@ -196,17 +196,17 @@ task :unoptimized_test_plans => [tests_unoptimized_json, tests_with_10_unoptimiz
 
 file tests_unoptimized_json => [tests_pruned_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_with_10_unoptimized_json => [tests_with_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_without_10_unoptimized_json => [tests_without_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plans
@@ -218,17 +218,17 @@ task :optimized_test_plans => [tests_optimized_json, tests_with_10_optimized_jso
 
 file tests_optimized_json => [tests_pruned_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_with_10_optimized_json => [tests_with_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_without_10_optimized_json => [tests_without_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --concorde #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 
@@ -241,17 +241,17 @@ task :unoptimized_visualizations => [tests_unoptimized_vis_txt, tests_with_10_un
 
 file tests_unoptimized_vis_txt => [tests_unoptimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_with_10_unoptimized_vis_txt => [tests_with_10_unoptimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_without_10_unoptimized_vis_txt => [tests_without_10_unoptimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate optimized test plan visualizations
@@ -263,17 +263,17 @@ task :optimized_visualizations => [tests_optimized_vis_txt, tests_with_10_optimi
 
 file tests_optimized_vis_txt => [tests_optimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_with_10_optimized_vis_txt => [tests_with_10_optimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_without_10_optimized_vis_txt => [tests_without_10_optimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 tests_unoptimized_html = "#{BUILD_DIR}/tests-unoptimized.html"
@@ -285,7 +285,7 @@ task :test_docs => [tests_unoptimized_html, tests_optimized_html]
 tests_unoptimized_adoc = "#{BUILD_DIR}/tests-unoptimized.adoc"
 file tests_unoptimized_adoc => [tests_unoptimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :unoptimized_documents => [tests_unoptimized_html]
@@ -298,7 +298,7 @@ end
 tests_optimized_adoc = "#{BUILD_DIR}/tests-optimized.adoc"
 file tests_optimized_adoc => [tests_optimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -I. generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :optimized_documents => [tests_optimized_html]
@@ -316,13 +316,13 @@ task :schedules => [tests_unoptimized_schedule_xml, tests_optimized_schedule_xml
 file tests_unoptimized_schedule_xml => [tests_unoptimized_json, costs_json, gantt_project_xml] do |t|
   t.prerequisites.delete(costs_json)
   t.prerequisites.delete(gantt_project_xml)
-  system "ruby -I. generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_optimized_schedule_xml => [tests_optimized_json, costs_json, gantt_project_xml] do |t|
   t.prerequisites.delete(costs_json)
   t.prerequisites.delete(gantt_project_xml)
-  system "ruby -I. generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Generate progress plot
