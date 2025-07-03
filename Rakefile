@@ -13,6 +13,8 @@ task :default => %w[
   schedules
 ]
 
+task :build_dir => BUILD_DIR
+
 file BUILD_DIR do
   Dir.mkdir(BUILD_DIR) unless Dir.exist?(BUILD_DIR)
 end
