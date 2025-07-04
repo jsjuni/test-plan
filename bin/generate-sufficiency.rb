@@ -3,6 +3,7 @@
 require 'logger/application'
 require 'json'
 require 'optparse'
+require 'rgl/bidirectional_adjacency'
 
 class GenerateSufficiency < Logger::Application
 
@@ -11,11 +12,17 @@ class GenerateSufficiency < Logger::Application
   end
 
   def prune_configs(mode, max, configs)
-    lengths = configs.map { |c| c.length }
-    max_length = lengths.max
-    min_length = lengths.min
-    select = (mode == :least) ? min_length : max_length
-    candidates = configs.select { |c| c.length == select }
+    graph = configs.sort_by { |c| c.length }.map { |c| c.to_set }.inject(RGL::BidirectionalAdjacencyGraph.new) do |g, config|
+      subs = g.vertices.inject([]) do |sa, c|
+        sa << c if c < config
+        sa
+      end
+      g.add_vertex(config)
+      subs.each { |sub| g.add_edge(sub, config)}
+      g
+    end
+    degree = (mode == :least) ? :in_degree : :out_degree
+    candidates = graph.vertices.select { |config| graph.method(degree).call(config) == 0 }.map { |c| c.to_a }
     (max.nil? || candidates.length <= max) ? candidates : candidates.sample(max)
   end
 

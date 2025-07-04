@@ -23,6 +23,8 @@ Switch proxy strategy by `rake`_`proxy_target`_ followed by `rake`.
 
 ### Sufficiency Assertions
 
+For the purpose of sufficiency assertions, assume that the configurations for a given requirement are placed in a directed graph whose edges represent subset relations. That is, if _C<sub>1</sub>_ is a subset of _C<sub>2</sub>_, then there is an edge from _C<sub>1</sub>_ to _C<sub>2</sub>_, and we say _C<sub>1</sub>_ is _less restrictive than_ _C<sub>2</sub>_. The _least restrictive_ configurations are those whose in degree in the graph is 0; the _most restrictive_ configurations are those whose out degree is 0.
+
 |target|strategy|
 |------|--------|
 | `sufficient_none` | all configurations are necessary |
