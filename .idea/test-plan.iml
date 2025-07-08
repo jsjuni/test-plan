@@ -124,8 +124,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/generate-testplan.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map costs.json tests-optimized.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/generate-testplan.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="build/tests-optimized.json" />
         <method v="2" />
       </configuration>
       <configuration default="false" name="prune-tests" type="RubyRunConfigurationType" factoryName="Ruby">
@@ -166,7 +166,7 @@
       </configuration>
       <configuration default="false" name="optimize-test-order" type="RubyRunConfigurationType" factoryName="Ruby">
         <module name="test-plan" />
-        <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-I." />
+        <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-Ilib" />
         <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
         <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
         <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
@@ -178,8 +178,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/optimize-test-order.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map costs.json --concorde tests-pruned.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/optimize-test-order.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map build/costs.json --concorde build/tests-pruned.json" />
         <method v="2" />
       </configuration>
     </shared>

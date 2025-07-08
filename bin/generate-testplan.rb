@@ -20,12 +20,7 @@ class GenerateTestplan < Logger::Application
   def run
     @options = {}
     OptionParser.new(:req) do |parser|
-      parser.on('-c MAP', '--cost-map MAP', 'cost map')
-    end.parse!(into: @options)
-
-    raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
-
-    costs = JSON.parse(File.read(cost_map_file))['observations']
+   end.parse!(into: @options)
 
     js = JSON.parse(ARGF.read)
 
@@ -36,8 +31,8 @@ class GenerateTestplan < Logger::Application
     nq = tests.inject(Set.new) { |s, t| s + t['quantities'].keys }.length
     no = tests.inject(0) { |s, t| s + t['quantities'].length }
     nr = tests.inject(Set.new) { |s, t| s + t['quantities'].values.map { |v| v['requirements'] }.flatten }.length
-    oc = tests.inject(0) { |s, t| s + t['quantities'].keys.map { |q| costs[q] }.sum }
-    rc = js['cost']
+    rc = js['reconfiguration_cost']
+    oc = js['observation_cost']
 
     qty_by_rqt = { }
     test_abbrevs_by_qty = Hash.new { |h, k| h[k] = Set.new }

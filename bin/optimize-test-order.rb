@@ -40,12 +40,16 @@ class OptimizeTestOrder < Logger::Application
     raise '--no-optimize invalid with --concorde' if !@options[:optimize] && @options[:concorde]
 
     log(Logger::INFO, "loading cost map")
-    cost_map = JSON.parse(File.read(cost_map_file))['scenarios']
-    log(Logger::INFO, "loaded #{cost_map.length} cost map entries")
+    cost_map = JSON.parse(File.read(cost_map_file))
+    log(Logger::INFO, "loaded #{cost_map['observations'].length + cost_map['scenarios'].length} cost map entries")
 
     t = JSON.parse(ARGF.read)
-    tests = (@options[:resort] ? t.sort_by { rand } : t.dup).unshift({ 'id' => 0, 'scenarios' => [] })
-    weights = make_weights(tests, cost_map)
+    tests = (@options[:resort] ? t.sort_by { rand } : t.dup).unshift({ 'id' => 0, 'scenarios' => [], 'quantities' => {} })
+    weights = make_weights(tests, cost_map['scenarios'])
+
+    observation_cost = tests.inject(0) do |c, t|
+      c + t['quantities'].keys.map { |q| cost_map['observations'][q] }.reduce(0, :+)
+    end
 
     if @options[:concorde]
       require 'concorde'
@@ -59,16 +63,16 @@ class OptimizeTestOrder < Logger::Application
       concorde = Concorde.new(concorde_spec)
       concorde.optimize
       tour = concorde.tour
-      cost = concorde.cost
+      reconfiguration_cost = concorde.cost
     else
       tsp = ::TSP_2opt.new(weights)
       log(Logger::INFO, "initial tour cost: #{tsp.cost}")
       tsp.optimize if @options[:optimize]
       tour = tsp.tour
-      cost = tsp.cost
+      reconfiguration_cost = tsp.cost
     end
 
-    log(Logger::INFO, "optimized tour cost: #{cost}")
+    log(Logger::INFO, "optimized tour cost: #{reconfiguration_cost}")
 
     init = tour.find_index { |t| tests[t]['id'] == 0 }
     order = (init == 0) ? tour : tour[init..-1] + tour[0...(init - 1)]
@@ -88,7 +92,7 @@ class OptimizeTestOrder < Logger::Application
       tests_tour.shift
     end
     log(Logger::INFO, "emitting #{opt_tests.length} test configurations")
-    puts JSON.pretty_generate({cost: cost, tests: opt_tests})
+    puts JSON.pretty_generate({reconfiguration_cost: reconfiguration_cost, observation_cost: observation_cost, tests: opt_tests})
     0
   end
 

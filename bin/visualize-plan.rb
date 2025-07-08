@@ -31,32 +31,40 @@ class VisualizePlan < Logger::Application
     OptionParser.new do |opts|
       opts.banner = "Usage: visualize-plan.rb [options]"
       opts.on('-c COSTS', '--cost-map COSTS', 'scenario costs file')
+      opts.on('-o', '--observations')
     end.parse!(into: options)
 
     raise 'no costs file' unless (cost_map_file = options['cost-map'.to_sym])
 
-    costs = JSON.parse(File.read(cost_map_file))['scenarios']
+    costs_root = JSON.parse(File.read(cost_map_file))
+    costs = options[:observations] ? costs_root['observations'] : costs_root['scenarios']
 
     js = JSON.parse(ARGF.read)
     tests = js['tests']
-    scenarios = Set.new
-    tests.each do |t|
-      scenarios += t['scenarios']
+
+    categories = tests.inject(Set.new) do |cs, t|
+      if options[:observations]
+        cs + t['quantities'].keys
+      else
+        cs + t['scenarios']
+      end
     end
 
-    puts "cost: #{js['cost']}"
+    puts "reconfiguration cost: #{js['reconfiguration_cost']}"
+    puts "observation cost: #{js['observation_cost']}"
     rem = tests.length % 10
     tens = (tests.length - rem) / 10
     puts '      ' + TEN_MARKER * tens + '.' * rem + ' changes'
 
-    ss = scenarios.sort { |s1, s2| self.compare(s1, s2, costs) }
+    cs = categories.sort { |s1, s2| self.compare(s1, s2, costs) }
 
-    ss.each do |scenario|
-      label = "%5s " % scenario
+    cs.each do |category|
+      label = "%5s " % category
       changes = 0
       last_in = false
       data = tests.inject(String.new) do |s, t|
-        now_in = t['scenarios'].include?(scenario)
+        t_categories = options[:observations] ? t['quantities'].keys : t['scenarios']
+        now_in = t_categories.include?(category)
         if now_in != last_in
           last_in = now_in
           changes += 1
