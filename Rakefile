@@ -323,6 +323,35 @@ file tests_without_10_optimized_obs_vis_txt => [tests_without_10_optimized_json,
   system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --observations --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
+# Generate heat maps for test plan documents
+
+tests_unoptimized_scn_heat_png = "build/tests-unoptimized-scn-heat.png"
+tests_unoptimized_obs_heat_png = "build/tests-unoptimized-obs-heat.png"
+tests_optimized_scn_heat_png = "build/tests-optimized-scn-heat.png"
+tests_optimized_obs_heat_png = "build/tests-optimized-obs-heat.png"
+
+task :heat_maps => [tests_unoptimized_scn_heat_png, tests_unoptimized_obs_heat_png, tests_optimized_scn_heat_png, tests_optimized_obs_heat_png]
+
+file tests_unoptimized_scn_heat_png => [costs_json, tests_unoptimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --configuration #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_unoptimized_obs_heat_png => [costs_json, tests_unoptimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --observation #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_optimized_scn_heat_png => [costs_json, tests_optimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --configuration #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_optimized_obs_heat_png => [costs_json, tests_optimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --observation #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
 # Generate test plan documents
 
 tests_unoptimized_html = "#{BUILD_DIR}/tests-unoptimized.html"
@@ -332,9 +361,12 @@ task :test_docs => [tests_unoptimized_html, tests_optimized_html]
 # Generate unoptimized test plan document
 
 tests_unoptimized_adoc = "#{BUILD_DIR}/tests-unoptimized.adoc"
-file tests_unoptimized_adoc => [tests_unoptimized_json, costs_json] do |t|
+file tests_unoptimized_adoc => [tests_unoptimized_json, costs_json, tests_unoptimized_scn_heat_png, tests_unoptimized_obs_heat_png] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+  t.prerequisites.delete(tests_unoptimized_scn_heat_png)
+  t.prerequisites.delete(tests_unoptimized_obs_heat_png)
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb " +
+         "--configuration #{tests_unoptimized_scn_heat_png} --observation #{tests_unoptimized_obs_heat_png} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :unoptimized_documents => [tests_unoptimized_html]
@@ -345,9 +377,12 @@ end
 # Generate optimized test plan document
 
 tests_optimized_adoc = "#{BUILD_DIR}/tests-optimized.adoc"
-file tests_optimized_adoc => [tests_optimized_json, costs_json] do |t|
+file tests_optimized_adoc => [tests_optimized_json, costs_json, tests_optimized_scn_heat_png, tests_optimized_obs_heat_png] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb #{t.prerequisites.join(' ')} > #{t.name}"
+  t.prerequisites.delete(tests_optimized_scn_heat_png)
+  t.prerequisites.delete(tests_optimized_obs_heat_png)
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb --optimized " +
+         "--configuration #{tests_optimized_scn_heat_png} --observation #{tests_optimized_obs_heat_png} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 task :optimized_documents => [tests_optimized_html]
@@ -382,7 +417,7 @@ test_campaign_progress_png = "#{BUILD_DIR}/test-campaign-progress.png"
 task :progress_plot => test_campaign_progress_png
 
 file test_campaign_progress_png => [tests_unoptimized_schedule_gan, tests_optimized_schedule_gan] do |t|
-  system "Rscript plot-progress.R #{t.prerequisites.join(' ')} #{t.name}"
+  system "Rscript bin/progress.R #{t.prerequisites.join(' ')} #{t.name}"
 end
 
 # Convenience tasks for proxies.

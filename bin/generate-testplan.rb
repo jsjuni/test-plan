@@ -19,8 +19,14 @@ class GenerateTestplan < Logger::Application
 
   def run
     @options = {}
-    OptionParser.new(:req) do |parser|
-   end.parse!(into: @options)
+    OptionParser.new(:req) do |opts|
+      opts.on('--optimized')
+      opts.on('-c HEAT_MAP', '--configuration HEAT_MAP', 'optional configuration costs heat map')
+      opts.on('-o HEAT_MAP', '--observation HEAT_MAP', 'optional observation costs heat map')
+    end.parse!(into: @options)
+
+    c_map = @options[:configuration]
+    o_map = @options[:observation]
 
     js = JSON.parse(ARGF.read)
 
@@ -71,9 +77,25 @@ class GenerateTestplan < Logger::Application
     puts 'During each test, all quantities constrained by any requirement that applies during any scenario'
     puts 'in that configuration are observed and recorded.'
     puts
-    puts 'Tests are ordered such that the scenario changes between tests are reduced.'
+    if @options[:optimized]
+      puts 'Tests are ordered such that the scenario changes between tests are reduced.'
+    end
     puts 'Specific instructions for which scenarios to retract and apply are provided for each test.'
     puts
+    if c_map || o_map
+      puts '== Cost Heat Maps'
+      if c_map
+        puts '=== Configuration Costs'
+        puts "image::#{File.basename(c_map)}[Configuration Costs HeatMap]"
+        puts
+      end
+      if o_map
+        puts '=== Observation Costs'
+        puts "image::#{File.basename(o_map)}[Observation Costs HeatMap]"
+        puts
+      end
+      puts
+    end
     puts '== Tests'
     puts
     puts "For each test,"
