@@ -71,7 +71,7 @@ png(filename = png_file, width = 800, height = 600)
 
 cost_col <- if (type == "--configuration") scaled_map_data$scaled_cost else scaled_map_data$cost
 ggplot(scaled_map_data, aes(x=test, y=category)) +
-  labs(y = ylabel) + 
+  labs(y = ylabel, fill = "cost") + 
   geom_tile(aes(fill = cost_col)) +
   scale_fill_gradient(low = "white", high = "red")
 
