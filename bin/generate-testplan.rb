@@ -68,7 +68,7 @@ class GenerateTestplan < Logger::Application
     puts "* Scenarios: #{ns}"
     puts "* Quantities: #{nq}"
     puts "* Configurations: #{nc}"
-    puts "* Reconfiguration Costs: #{rc}"
+    puts "* Configuration Costs: #{rc}"
     puts "* Observations: #{no}"
     puts "* Observation Costs: #{oc}"
     puts "* Total Costs: #{rc + oc}"
