@@ -19,7 +19,7 @@ class GenerateTestplan < Logger::Application
 
   def run
     @options = {}
-    OptionParser.new(:req) do |opts|
+    OptionParser.new do |opts|
       opts.on('--optimized')
       opts.on('-c HEAT_MAP', '--configuration HEAT_MAP', 'optional configuration costs heat map')
       opts.on('-o HEAT_MAP', '--observation HEAT_MAP', 'optional observation costs heat map')
