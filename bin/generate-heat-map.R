@@ -54,7 +54,7 @@ map_data <- Reduce(
   x = Map(function(t) get_heat(t, categories_factor, costs), tests)
 )
 
-md <- Reduce(
+scaled_map_data <- Reduce(
   f = function(x, y) rbind(x, y),
   x = Map(
     f = function(df) {
@@ -69,8 +69,8 @@ md <- Reduce(
 
 png(filename = png_file, width = 800, height = 600)
 
-cost_col <- if (type == "--configuration") md$scaled_cost else md$cost
-ggplot(md, aes(x=test, y=category)) +
+cost_col <- if (type == "--configuration") scaled_map_data$scaled_cost else scaled_map_data$cost
+ggplot(scaled_map_data, aes(x=test, y=category)) +
   labs(y = ylabel) + 
   geom_tile(aes(fill = cost_col)) +
   scale_fill_gradient(low = "white", high = "red")
