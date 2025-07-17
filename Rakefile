@@ -52,7 +52,8 @@ task :requirements => requirements_json
 file requirements_json => [quantities_json, scenarios_json] do |t|
   t.prerequisites.delete(quantities_json)
   t.prerequisites.delete(scenarios_json)
-  system "ruby -Ilib #{BIN_DIR}/generate-requirements.rb --quantities #{quantities_json} --scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/generate-requirements.rb --number 200 --quantities #{quantities_json} " +
+         "--scenarios #{scenarios_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 # Substitute scenario proxies.

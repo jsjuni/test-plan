@@ -4,7 +4,6 @@ require 'json'
 require 'logger/application'
 require 'optparse'
 
-N_REQUIREMENTS = 200.freeze
 P_2SITUATION = 0.1.freeze
 MAX_SCENARIOS = 5.freeze
 
@@ -17,9 +16,10 @@ class GenerateRequirements < Logger::Application
 
   def run
 
-    options = {}
+    options = { number: 200 }
     OptionParser.new do |opts|
       opts.banner = "Usage: generate-requirements.rb [options]"
+      opts.on('-n NUMBER', '--number NUMBER', Integer, 'number of requirements (default 200)')
       opts.on('-q QUANTITIES', '--quantities QUANTITIES', 'quantities JSON file')
       opts.on('-s SCENARIOS', '--scenarios SCENARIOS', 'scenarios JSON file')
       opts.on('--seed SEED', Integer, 'RNG seed')
@@ -32,7 +32,7 @@ class GenerateRequirements < Logger::Application
     all_scenarios = JSON.parse(File.open(options[:scenarios], 'r').read)['scenarios'].map { |s| s['id'] }
 
     srand((seed = options[:seed] ? seed : 0))
-    1.upto(N_REQUIREMENTS).each do |i|
+    1.upto(options[:number]).each do |i|
       id = "R.#{i}"
       n_situations = (rand < P_2SITUATION) ? 2 : 1
       situations = 1.upto(n_situations).inject([]) do |cl, c|
