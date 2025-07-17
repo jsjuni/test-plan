@@ -35,25 +35,21 @@ class PruneTests < Logger::Application
     tests.each do |test|
       t_uuid = test['uuid']
       config = Set.new(test['scenarios'])
-      test_logged = false
 
       drop_quantities = []
       test['quantities'].each do |q_id, qh|
-        qh['requirements'].each do |r_id|
-          unless sufficients[r_id].include?(config)
-            unless test_logged
-              log(Logger::INFO, "prune test #{t_uuid}")
-              test_logged = true
-            end
-            log(Logger::INFO, "  drop requirement #{r_id}")
-            qh['requirements'].delete(r_id)
-          end
-          drop_quantities << q_id if qh['requirements'].empty?
+        drop_requirements = qh['requirements'].reject do |r_id|
+          sufficients[r_id].include?(config)
         end
+        drop_requirements.each do |drop_r|
+          log(Logger::INFO, "drop requirement #{drop_r} from test #{t_uuid}")
+          qh['requirements'].delete(drop_r)
+        end
+        drop_quantities << q_id if qh['requirements'].empty?
       end
 
       drop_quantities.each do |drop_q|
-        log(Logger::INFO, "  drop quantity #{drop_q}")
+        log(Logger::INFO, "drop quantity #{drop_q} from test #{t_uuid}")
         test['quantities'].delete(drop_q)
       end
       drop_tests << test if test['quantities'].empty?
