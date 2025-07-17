@@ -30,14 +30,13 @@ class PruneTests < Logger::Application
       h.store(sh['id'], Set.new(sh['configs'].map { |c| Set.new(c)})); h
     end
 
-    drop_tests = []
-
-    tests.each do |test|
+    drop_tests = tests.inject([]) do |dt, test|
       t_uuid = test['uuid']
       config = Set.new(test['scenarios'])
 
-      drop_quantities = []
-      test['quantities'].each do |q_id, qh|
+      # Drop each requirement for which some other configuration suffices.
+
+      drop_quantities = test['quantities'].inject([]) do |dq, (q_id, qh)|
         drop_requirements = qh['requirements'].reject do |r_id|
           sufficients[r_id].include?(config)
         end
@@ -45,16 +44,22 @@ class PruneTests < Logger::Application
           log(Logger::INFO, "drop requirement #{drop_r} from test #{t_uuid}")
           qh['requirements'].delete(drop_r)
         end
-        drop_quantities << q_id if qh['requirements'].empty?
+        dq << q_id if qh['requirements'].empty?
+        dq
       end
+
+      # Drop each quantity for which no requirements apply.
 
       drop_quantities.each do |drop_q|
         log(Logger::INFO, "drop quantity #{drop_q} from test #{t_uuid}")
         test['quantities'].delete(drop_q)
       end
-      drop_tests << test if test['quantities'].empty?
+      dt << test if test['quantities'].empty?
+      dt
     end
 
+    # Drop each test that entails no quantities.
+    
     drop_tests.each do |drop_t|
       log(Logger::INFO, "drop test #{drop_t['uuid']}")
       tests.delete(drop_t)
