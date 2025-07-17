@@ -22,47 +22,46 @@ class PruneTests < Logger::Application
 
     raise "no sufficiency file #{options[:sufficiency]}" if options[:sufficiency].nil?
 
-    sufficients = JSON.parse(File.read(options[:sufficiency]))
+    sufficients_json = JSON.parse(File.read(options[:sufficiency]))
 
     tests = JSON.parse(ARGF.read)
 
-    sufficients.each do |suff|
-      s_r_id = suff['id']
-      s_configs = suff['configs']
+    sufficients = sufficients_json.inject({}) do |h, sh|
+      h.store(sh['id'], Set.new(sh['configs'].map { |c| Set.new(c)})); h
+    end
 
-      drop_tests = []
+    drop_tests = []
 
-      tests.each do |test|
-        t_uuid = test['uuid']
-        config = Set.new(test['scenarios'])
-        test_logged = false
+    tests.each do |test|
+      t_uuid = test['uuid']
+      config = Set.new(test['scenarios'])
+      test_logged = false
 
-        drop_quantities = []
-        test['quantities'].each do |q_id, qh|
-          unless s_configs.any? { |s_config| Set.new(s_config) == config }
-            if qh['requirements'].include?(s_r_id)
-              unless test_logged
-                log(Logger::INFO, "prune test #{t_uuid}")
-                test_logged = true
-              end
-              log(Logger::INFO, "  drop requirement #{s_r_id}")
-              qh['requirements'].delete(s_r_id)
+      drop_quantities = []
+      test['quantities'].each do |q_id, qh|
+        qh['requirements'].each do |r_id|
+          unless sufficients[r_id].include?(config)
+            unless test_logged
+              log(Logger::INFO, "prune test #{t_uuid}")
+              test_logged = true
             end
-            drop_quantities << q_id if qh['requirements'].empty?
+            log(Logger::INFO, "  drop requirement #{r_id}")
+            qh['requirements'].delete(r_id)
           end
+          drop_quantities << q_id if qh['requirements'].empty?
         end
-
-        drop_quantities.each do |drop_q|
-          log(Logger::INFO, "  drop quantity #{drop_q}")
-          test['quantities'].delete(drop_q)
-        end
-        drop_tests << test if test['quantities'].empty?
       end
 
-      drop_tests.each do |drop_t|
-        log(Logger::INFO, "drop test #{drop_t['uuid']}")
-        tests.delete(drop_t)
+      drop_quantities.each do |drop_q|
+        log(Logger::INFO, "  drop quantity #{drop_q}")
+        test['quantities'].delete(drop_q)
       end
+      drop_tests << test if test['quantities'].empty?
+    end
+
+    drop_tests.each do |drop_t|
+      log(Logger::INFO, "drop test #{drop_t['uuid']}")
+      tests.delete(drop_t)
     end
 
     puts JSON.pretty_generate(tests)
