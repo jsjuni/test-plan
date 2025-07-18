@@ -6,6 +6,7 @@ require 'rgl/adjacency'
 require 'rgl/transitivity'
 require 'optparse'
 require 'securerandom'
+require 'digest'
 
 class GenerateTests < Logger::Application
 
@@ -72,9 +73,11 @@ class GenerateTests < Logger::Application
         s << q if rh[:requirements].any? { |r| rqmts_direct.include?(r) }
         s
       end
+      config = ss.to_a.sort
       tests << {
         uuid: SecureRandom.uuid,
-        scenarios: ss.to_a.sort,
+        config_digest: Digest::MD5.hexdigest(config.to_s),
+        scenarios: config,
         quantities: qh,
         requirements_direct: rqmts_direct.to_a,
         quantities_direct: quantities_direct

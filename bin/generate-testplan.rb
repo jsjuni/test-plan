@@ -110,8 +110,8 @@ class GenerateTestplan < Logger::Application
     tests.each do |test|
       puts '[discrete]'
       puts "=== Test #{test['id']}"
-      puts
-      puts "Test UUID: #{test['uuid']}"
+      puts "* Test UUID: #{test['uuid']}"
+      puts "* Configuration Digest: #{test['config_digest']}"
       puts
       puts '[discrete]'
       puts '==== Configuration'
