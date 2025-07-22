@@ -86,12 +86,12 @@ class GenerateTestplan < Logger::Application
       puts '== Cost Heat Maps'
       if c_map
         puts '=== Configuration Costs'
-        puts "image::#{File.basename(c_map)}[Configuration Costs HeatMap]"
+        puts "image::#{File.basename(c_map)}[Configuration Costs Heat Map]"
         puts
       end
       if o_map
         puts '=== Observation Costs'
-        puts "image::#{File.basename(o_map)}[Observation Costs HeatMap]"
+        puts "image::#{File.basename(o_map)}[Observation Costs Heat Map]"
         puts
       end
       puts

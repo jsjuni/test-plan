@@ -142,8 +142,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/prune-tests.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--sufficiency sufficient.json tests-proxied.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/prune-tests.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--sufficiency build/sufficient.json build/tests.json" />
         <method v="2" />
       </configuration>
       <configuration default="false" name="generate-tests" type="RubyRunConfigurationType" factoryName="Ruby">
