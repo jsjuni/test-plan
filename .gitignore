@@ -66,3 +66,7 @@ build-iPhoneSimulator/
 *.svg
 *.dot
 .DS_Store
+.Untitled.ipynb.layout
+.ipynb_checkpoints/
+.test-plan.ipynb.layout
+.virtual_documents/
