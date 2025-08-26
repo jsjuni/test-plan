@@ -1,0 +1,2739 @@
+{
+  "requirements": [
+    {
+      "id": "R.1",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4"
+          ]
+        }
+      ],
+      "quantity": "Q.4"
+    },
+    {
+      "id": "R.2",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.8",
+            "S.15",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.2"
+    },
+    {
+      "id": "R.3",
+      "situations": [
+        {
+          "scenarios": [
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.38"
+    },
+    {
+      "id": "R.4",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.21"
+    },
+    {
+      "id": "R.5",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.6",
+            "S.17",
+            "S.18"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.4",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.6",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.7",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.3",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.8",
+      "situations": [
+        {
+          "scenarios": [
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.9",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.3",
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.42"
+    },
+    {
+      "id": "R.10",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.15",
+            "S.17",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.36"
+    },
+    {
+      "id": "R.11",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.5"
+    },
+    {
+      "id": "R.12",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.6",
+            "S.11",
+            "S.14",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.13",
+      "situations": [
+        {
+          "scenarios": [
+            "S.14",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.50"
+    },
+    {
+      "id": "R.14",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.7",
+            "S.8"
+          ]
+        }
+      ],
+      "quantity": "Q.35"
+    },
+    {
+      "id": "R.15",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.12",
+            "S.16",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.16",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.44"
+    },
+    {
+      "id": "R.17",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4",
+            "S.6",
+            "S.7"
+          ]
+        }
+      ],
+      "quantity": "Q.19"
+    },
+    {
+      "id": "R.18",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10",
+            "S.12",
+            "S.15",
+            "S.18",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.2"
+    },
+    {
+      "id": "R.19",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.9",
+            "S.13",
+            "S.20"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.1"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.20",
+      "situations": [
+        {
+          "scenarios": [
+            "S.9",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.21",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.14"
+    },
+    {
+      "id": "R.22",
+      "situations": [
+        {
+          "scenarios": [
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.32"
+    },
+    {
+      "id": "R.23",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.14",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.33"
+    },
+    {
+      "id": "R.24",
+      "situations": [
+        {
+          "scenarios": [
+            "S.12",
+            "S.14",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.25",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.26",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.9",
+            "S.15",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.42"
+    },
+    {
+      "id": "R.27",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.7",
+            "S.15",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.28",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.12",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.13"
+    },
+    {
+      "id": "R.29",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.10",
+            "S.13",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.44"
+    },
+    {
+      "id": "R.30",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.6",
+            "S.9",
+            "S.16",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.31",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.32",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.13",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.32"
+    },
+    {
+      "id": "R.33",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.8",
+            "S.9",
+            "S.14"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.2",
+            "S.3",
+            "S.4",
+            "S.9",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.34",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.10",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.2"
+    },
+    {
+      "id": "R.35",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.9",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.36",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.18",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.37",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.7",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.45"
+    },
+    {
+      "id": "R.38",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.9",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.12"
+    },
+    {
+      "id": "R.39",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.9"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.10",
+            "S.12",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.40",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.28"
+    },
+    {
+      "id": "R.41",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.10",
+            "S.18",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.43"
+    },
+    {
+      "id": "R.42",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4"
+          ]
+        }
+      ],
+      "quantity": "Q.9"
+    },
+    {
+      "id": "R.43",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.9",
+            "S.10",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.44",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.45",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.15"
+    },
+    {
+      "id": "R.46",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.10",
+            "S.12",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.14"
+    },
+    {
+      "id": "R.47",
+      "situations": [
+        {
+          "scenarios": [
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.48",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.8",
+            "S.12",
+            "S.15",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.28"
+    },
+    {
+      "id": "R.49",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.50",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.8",
+            "S.14",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.43"
+    },
+    {
+      "id": "R.51",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.12",
+            "S.17",
+            "S.20"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.13",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.7"
+    },
+    {
+      "id": "R.52",
+      "situations": [
+        {
+          "scenarios": [
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.8"
+    },
+    {
+      "id": "R.53",
+      "situations": [
+        {
+          "scenarios": [
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.26"
+    },
+    {
+      "id": "R.54",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.8"
+          ]
+        }
+      ],
+      "quantity": "Q.17"
+    },
+    {
+      "id": "R.55",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.56",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.7"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.57",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.20"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.10",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.1"
+    },
+    {
+      "id": "R.58",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.4",
+            "S.12",
+            "S.17",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.21"
+    },
+    {
+      "id": "R.59",
+      "situations": [
+        {
+          "scenarios": [
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.48"
+    },
+    {
+      "id": "R.60",
+      "situations": [
+        {
+          "scenarios": [
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.32"
+    },
+    {
+      "id": "R.61",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.16"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.11",
+            "S.13",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.35"
+    },
+    {
+      "id": "R.62",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.5",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.63",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4",
+            "S.5",
+            "S.7",
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.64",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.5",
+            "S.8",
+            "S.12",
+            "S.16"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.8",
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.21"
+    },
+    {
+      "id": "R.65",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.8",
+            "S.10",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.20"
+    },
+    {
+      "id": "R.66",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.8",
+            "S.10",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.67",
+      "situations": [
+        {
+          "scenarios": [
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.68",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.3",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.7"
+    },
+    {
+      "id": "R.69",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.10",
+            "S.14",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.70",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.6",
+            "S.15",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.42"
+    },
+    {
+      "id": "R.71",
+      "situations": [
+        {
+          "scenarios": [
+            "S.14",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.72",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.11",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.73",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.16",
+            "S.18",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.74",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.8",
+            "S.14",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.75",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.8",
+            "S.12",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.3"
+    },
+    {
+      "id": "R.76",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.5",
+            "S.16",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.13"
+    },
+    {
+      "id": "R.77",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3"
+          ]
+        }
+      ],
+      "quantity": "Q.9"
+    },
+    {
+      "id": "R.78",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.79",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.8",
+            "S.13",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.21"
+    },
+    {
+      "id": "R.80",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.7",
+            "S.8",
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.81",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.14",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.9"
+    },
+    {
+      "id": "R.82",
+      "situations": [
+        {
+          "scenarios": [
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.38"
+    },
+    {
+      "id": "R.83",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.9",
+            "S.11",
+            "S.16",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.84",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.15"
+    },
+    {
+      "id": "R.85",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.7",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.86",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.2",
+            "S.3",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.15"
+    },
+    {
+      "id": "R.87",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.14",
+            "S.15",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.47"
+    },
+    {
+      "id": "R.88",
+      "situations": [
+        {
+          "scenarios": [
+            "S.12",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.42"
+    },
+    {
+      "id": "R.89",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.9",
+            "S.10",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.49"
+    },
+    {
+      "id": "R.90",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.12",
+            "S.14",
+            "S.15",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.50"
+    },
+    {
+      "id": "R.91",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.11",
+            "S.12",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.43"
+    },
+    {
+      "id": "R.92",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.8",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.10"
+    },
+    {
+      "id": "R.93",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.6",
+            "S.10",
+            "S.13",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.13"
+    },
+    {
+      "id": "R.94",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2"
+          ]
+        }
+      ],
+      "quantity": "Q.27"
+    },
+    {
+      "id": "R.95",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.9",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.43"
+    },
+    {
+      "id": "R.96",
+      "situations": [
+        {
+          "scenarios": [
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.4"
+    },
+    {
+      "id": "R.97",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.4"
+    },
+    {
+      "id": "R.98",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.7",
+            "S.9",
+            "S.15"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.5"
+          ]
+        }
+      ],
+      "quantity": "Q.46"
+    },
+    {
+      "id": "R.99",
+      "situations": [
+        {
+          "scenarios": [
+            "S.13",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    },
+    {
+      "id": "R.100",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.7"
+    },
+    {
+      "id": "R.101",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.14",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.102",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.44"
+    },
+    {
+      "id": "R.103",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10",
+            "S.13",
+            "S.14",
+            "S.15",
+            "S.16"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.6",
+            "S.9",
+            "S.17",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.38"
+    },
+    {
+      "id": "R.104",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.17"
+    },
+    {
+      "id": "R.105",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.9",
+            "S.13"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.5",
+            "S.6",
+            "S.7",
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.106",
+      "situations": [
+        {
+          "scenarios": [
+            "S.13",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.107",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.108",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.12",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.21"
+    },
+    {
+      "id": "R.109",
+      "situations": [
+        {
+          "scenarios": [
+            "S.17"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.10",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.110",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.111",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.8",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.28"
+    },
+    {
+      "id": "R.112",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.12",
+            "S.16"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.3",
+            "S.5",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.8"
+    },
+    {
+      "id": "R.113",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.5"
+    },
+    {
+      "id": "R.114",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.7",
+            "S.9",
+            "S.12"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.2",
+            "S.5",
+            "S.8",
+            "S.10",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.115",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.12",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.23"
+    },
+    {
+      "id": "R.116",
+      "situations": [
+        {
+          "scenarios": [
+            "S.9",
+            "S.10",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.117",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.118",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.8",
+            "S.10",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.27"
+    },
+    {
+      "id": "R.119",
+      "situations": [
+        {
+          "scenarios": [
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.38"
+    },
+    {
+      "id": "R.120",
+      "situations": [
+        {
+          "scenarios": [
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.44"
+    },
+    {
+      "id": "R.121",
+      "situations": [
+        {
+          "scenarios": [
+            "S.12",
+            "S.13",
+            "S.14",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    },
+    {
+      "id": "R.122",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.17",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.33"
+    },
+    {
+      "id": "R.123",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.9",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.124",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.7"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.125",
+      "situations": [
+        {
+          "scenarios": [
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.126",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.127",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.13",
+            "S.15",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.128",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6",
+            "S.11",
+            "S.19"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.5",
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.48"
+    },
+    {
+      "id": "R.129",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.12"
+    },
+    {
+      "id": "R.130",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.26"
+    },
+    {
+      "id": "R.131",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4",
+            "S.16",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.132",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.8",
+            "S.9",
+            "S.15"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.5",
+            "S.8",
+            "S.14",
+            "S.15"
+          ]
+        }
+      ],
+      "quantity": "Q.15"
+    },
+    {
+      "id": "R.133",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.7",
+            "S.10",
+            "S.15",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.10"
+    },
+    {
+      "id": "R.134",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.2",
+            "S.8",
+            "S.12",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.19"
+    },
+    {
+      "id": "R.135",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.12",
+            "S.16",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.136",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.15",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.13"
+    },
+    {
+      "id": "R.137",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.3",
+            "S.14",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.2"
+    },
+    {
+      "id": "R.138",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.41"
+    },
+    {
+      "id": "R.139",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.140",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.32"
+    },
+    {
+      "id": "R.141",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10",
+            "S.11",
+            "S.13",
+            "S.15"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.7"
+          ]
+        }
+      ],
+      "quantity": "Q.22"
+    },
+    {
+      "id": "R.142",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1"
+          ]
+        }
+      ],
+      "quantity": "Q.2"
+    },
+    {
+      "id": "R.143",
+      "situations": [
+        {
+          "scenarios": [
+            "S.16",
+            "S.17",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.144",
+      "situations": [
+        {
+          "scenarios": [
+            "S.13"
+          ]
+        }
+      ],
+      "quantity": "Q.14"
+    },
+    {
+      "id": "R.145",
+      "situations": [
+        {
+          "scenarios": [
+            "S.8",
+            "S.13",
+            "S.14",
+            "S.16",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.24"
+    },
+    {
+      "id": "R.146",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.5",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.50"
+    },
+    {
+      "id": "R.147",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.27"
+    },
+    {
+      "id": "R.148",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.7"
+          ]
+        }
+      ],
+      "quantity": "Q.7"
+    },
+    {
+      "id": "R.149",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.8",
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.22"
+    },
+    {
+      "id": "R.150",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.4",
+            "S.9",
+            "S.11",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.11"
+    },
+    {
+      "id": "R.151",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.6",
+            "S.8",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.152",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.10",
+            "S.11",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.22"
+    },
+    {
+      "id": "R.153",
+      "situations": [
+        {
+          "scenarios": [
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.11"
+    },
+    {
+      "id": "R.154",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.17"
+    },
+    {
+      "id": "R.155",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.5",
+            "S.8"
+          ]
+        }
+      ],
+      "quantity": "Q.18"
+    },
+    {
+      "id": "R.156",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.9",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.18"
+    },
+    {
+      "id": "R.157",
+      "situations": [
+        {
+          "scenarios": [
+            "S.9"
+          ]
+        }
+      ],
+      "quantity": "Q.45"
+    },
+    {
+      "id": "R.158",
+      "situations": [
+        {
+          "scenarios": [
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.12"
+    },
+    {
+      "id": "R.159",
+      "situations": [
+        {
+          "scenarios": [
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.160",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.14",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.38"
+    },
+    {
+      "id": "R.161",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.18"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.4",
+            "S.6",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.49"
+    },
+    {
+      "id": "R.162",
+      "situations": [
+        {
+          "scenarios": [
+            "S.10",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    },
+    {
+      "id": "R.163",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.7",
+            "S.8",
+            "S.10"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.164",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.5",
+            "S.16",
+            "S.17",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.28"
+    },
+    {
+      "id": "R.165",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.9",
+            "S.13",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.166",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.17",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.167",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4"
+          ]
+        }
+      ],
+      "quantity": "Q.20"
+    },
+    {
+      "id": "R.168",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.8",
+            "S.14",
+            "S.15",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.1"
+    },
+    {
+      "id": "R.169",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.4",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.29"
+    },
+    {
+      "id": "R.170",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.9",
+            "S.16",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.7"
+    },
+    {
+      "id": "R.171",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.11",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.30"
+    },
+    {
+      "id": "R.172",
+      "situations": [
+        {
+          "scenarios": [
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.17"
+    },
+    {
+      "id": "R.173",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.5",
+            "S.14",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.174",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.9",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.23"
+    },
+    {
+      "id": "R.175",
+      "situations": [
+        {
+          "scenarios": [
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.16"
+    },
+    {
+      "id": "R.176",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.177",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.9",
+            "S.11",
+            "S.14",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.48"
+    },
+    {
+      "id": "R.178",
+      "situations": [
+        {
+          "scenarios": [
+            "S.9",
+            "S.17",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.47"
+    },
+    {
+      "id": "R.179",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.4",
+            "S.13",
+            "S.16",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.18"
+    },
+    {
+      "id": "R.180",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.40"
+    },
+    {
+      "id": "R.181",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.6",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    },
+    {
+      "id": "R.182",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4"
+          ]
+        }
+      ],
+      "quantity": "Q.26"
+    },
+    {
+      "id": "R.183",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.3",
+            "S.8",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.26"
+    },
+    {
+      "id": "R.184",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.4",
+            "S.13",
+            "S.17",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.37"
+    },
+    {
+      "id": "R.185",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.10",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.20"
+    },
+    {
+      "id": "R.186",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.4",
+            "S.8",
+            "S.9",
+            "S.14"
+          ]
+        }
+      ],
+      "quantity": "Q.25"
+    },
+    {
+      "id": "R.187",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.7",
+            "S.12",
+            "S.17",
+            "S.19"
+          ]
+        }
+      ],
+      "quantity": "Q.48"
+    },
+    {
+      "id": "R.188",
+      "situations": [
+        {
+          "scenarios": [
+            "S.3",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.28"
+    },
+    {
+      "id": "R.189",
+      "situations": [
+        {
+          "scenarios": [
+            "S.4",
+            "S.8",
+            "S.14",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    },
+    {
+      "id": "R.190",
+      "situations": [
+        {
+          "scenarios": [
+            "S.6"
+          ]
+        }
+      ],
+      "quantity": "Q.43"
+    },
+    {
+      "id": "R.191",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2"
+          ]
+        }
+      ],
+      "quantity": "Q.39"
+    },
+    {
+      "id": "R.192",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.11",
+            "S.15",
+            "S.18",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.26"
+    },
+    {
+      "id": "R.193",
+      "situations": [
+        {
+          "scenarios": [
+            "S.7",
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.194",
+      "situations": [
+        {
+          "scenarios": [
+            "S.11",
+            "S.13",
+            "S.14",
+            "S.19",
+            "S.20"
+          ]
+        }
+      ],
+      "quantity": "Q.31"
+    },
+    {
+      "id": "R.195",
+      "situations": [
+        {
+          "scenarios": [
+            "S.2",
+            "S.9",
+            "S.10",
+            "S.17"
+          ]
+        }
+      ],
+      "quantity": "Q.6"
+    },
+    {
+      "id": "R.196",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.16"
+          ]
+        }
+      ],
+      "quantity": "Q.35"
+    },
+    {
+      "id": "R.197",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.5"
+          ]
+        }
+      ],
+      "quantity": "Q.27"
+    },
+    {
+      "id": "R.198",
+      "situations": [
+        {
+          "scenarios": [
+            "S.1",
+            "S.5",
+            "S.18"
+          ]
+        }
+      ],
+      "quantity": "Q.50"
+    },
+    {
+      "id": "R.199",
+      "situations": [
+        {
+          "scenarios": [
+            "S.5",
+            "S.11"
+          ]
+        }
+      ],
+      "quantity": "Q.45"
+    },
+    {
+      "id": "R.200",
+      "situations": [
+        {
+          "scenarios": [
+            "S.15"
+          ]
+        },
+        {
+          "scenarios": [
+            "S.12"
+          ]
+        }
+      ],
+      "quantity": "Q.34"
+    }
+  ]
+}
