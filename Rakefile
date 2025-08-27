@@ -471,12 +471,41 @@ end
 
 # Generate heat maps for test plan documents
 
-tests_pruned_unoptimized_scn_heat_png = "build/tests-unoptimized-scn-heat.png"
-tests_pruned_unoptimized_obs_heat_png = "build/tests-unoptimized-obs-heat.png"
-tests_pruned_optimized_scn_heat_png = "build/tests-optimized-scn-heat.png"
-tests_pruned_optimized_obs_heat_png = "build/tests-optimized-obs-heat.png"
+task :heat_maps => [:unpruned_heat_maps, :pruned_heat_maps]
 
-task :heat_maps => [tests_pruned_unoptimized_scn_heat_png, tests_pruned_unoptimized_obs_heat_png, tests_pruned_optimized_scn_heat_png, tests_pruned_optimized_obs_heat_png]
+tests_unpruned_unoptimized_scn_heat_png = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-scn-heat.png"
+tests_unpruned_unoptimized_obs_heat_png = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-obs-heat.png"
+tests_unpruned_optimized_scn_heat_png = "#{BUILD_UNPRUNED_DIR}/tests-optimized-scn-heat.png"
+tests_unpruned_optimized_obs_heat_png = "#{BUILD_UNPRUNED_DIR}/tests-optimized-obs-heat.png"
+
+task :unpruned_heat_maps => [tests_unpruned_unoptimized_scn_heat_png, tests_unpruned_unoptimized_obs_heat_png, tests_unpruned_optimized_scn_heat_png, tests_unpruned_optimized_obs_heat_png]
+
+file tests_unpruned_unoptimized_scn_heat_png => [costs_json, tests_unpruned_unoptimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --configuration #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_unpruned_unoptimized_obs_heat_png => [costs_json, tests_unpruned_unoptimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --observation #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_unpruned_optimized_scn_heat_png => [costs_json, tests_unpruned_optimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --configuration #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+file tests_unpruned_optimized_obs_heat_png => [costs_json, tests_unpruned_optimized_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "Rscript bin/generate-heat-map.R --observation #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+tests_pruned_unoptimized_scn_heat_png = "#{BUILD_PRUNED_DIR}/tests-unoptimized-scn-heat.png"
+tests_pruned_unoptimized_obs_heat_png = "#{BUILD_PRUNED_DIR}/tests-unoptimized-obs-heat.png"
+tests_pruned_optimized_scn_heat_png = "#{BUILD_PRUNED_DIR}/tests-optimized-scn-heat.png"
+tests_pruned_optimized_obs_heat_png = "#{BUILD_PRUNED_DIR}/tests-optimized-obs-heat.png"
+
+task :pruned_heat_maps => [tests_pruned_unoptimized_scn_heat_png, tests_pruned_unoptimized_obs_heat_png, tests_pruned_optimized_scn_heat_png, tests_pruned_optimized_obs_heat_png]
 
 file tests_pruned_unoptimized_scn_heat_png => [costs_json, tests_pruned_unoptimized_json] do |t|
   t.prerequisites.delete(costs_json)
