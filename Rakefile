@@ -295,10 +295,32 @@ end
 
 # Generate unoptimized test plan scenario visualizations
 
+task :unoptimized_scn_visualizations => [:unpruned_unoptimized_scn_visualizations, :pruned_unoptimized_scn_visualizations]
+
+tests_unpruned_unoptimized_scn_vis_txt = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-scn-vis.txt"
+tests_unpruned_with_10_unoptimized_scn_vis_txt = "#{BUILD_UNPRUNED_DIR}/tests-with-10-unoptimized-scn-vis.txt"
+tests_unpruned_without_10_unoptimized_scn_vis_txt = "#{BUILD_UNPRUNED_DIR}/tests-without-10-unoptimized-scn-vis.txt"
+task :unpruned_unoptimized_scn_visualizations => [tests_unpruned_unoptimized_scn_vis_txt, tests_unpruned_with_10_unoptimized_scn_vis_txt, tests_unpruned_without_10_unoptimized_scn_vis_txt]
+
+file tests_unpruned_unoptimized_scn_vis_txt => [tests_unpruned_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file tests_unpruned_with_10_unoptimized_scn_vis_txt => [tests_unpruned_with_10_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file tests_unpruned_without_10_unoptimized_scn_vis_txt => [tests_unpruned_without_10_unoptimized_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
 tests_pruned_unoptimized_scn_vis_txt = "#{BUILD_PRUNED_DIR}/tests-unoptimized-scn-vis.txt"
 tests_pruned_with_10_unoptimized_scn_vis_txt = "#{BUILD_PRUNED_DIR}/tests-with-10-unoptimized-scn-vis.txt"
 tests_pruned_without_10_unoptimized_scn_vis_txt = "#{BUILD_PRUNED_DIR}/tests-without-10-unoptimized-scn-vis.txt"
-task :unoptimized_scn_visualizations => [tests_pruned_unoptimized_scn_vis_txt, tests_pruned_with_10_unoptimized_scn_vis_txt, tests_pruned_without_10_unoptimized_scn_vis_txt]
+task :pruned_unoptimized_scn_visualizations => [tests_pruned_unoptimized_scn_vis_txt, tests_pruned_with_10_unoptimized_scn_vis_txt, tests_pruned_without_10_unoptimized_scn_vis_txt]
 
 file tests_pruned_unoptimized_scn_vis_txt => [tests_pruned_unoptimized_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
