@@ -98,7 +98,7 @@ tests_json = "#{BUILD_DIR}/tests.json"
 task :tests => tests_json
 
 configurations_graph_json = "#{BUILD_DIR}/configurations.json"
-file configurations_graph_json => requirements_proxied_json
+file configurations_graph_json => tests_json
 
 requirements_summary_json = "#{BUILD_DIR}/requirements-summary.json"
 file requirements_summary_json => tests_json
