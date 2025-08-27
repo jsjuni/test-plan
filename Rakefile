@@ -529,9 +529,11 @@ end
 
 # Generate test plan documents
 
+task :test_docs => [:pruned_test_docs, :unpruned_test_docs]
+
 tests_pruned_unoptimized_html = "#{BUILD_PRUNED_DIR}/tests-unoptimized.html"
 tests_pruned_optimized_html = "#{BUILD_PRUNED_DIR}/tests-optimized.html"
-task :test_docs => [tests_pruned_unoptimized_html, tests_pruned_optimized_html]
+task :pruned_test_docs => [tests_pruned_unoptimized_html, tests_pruned_optimized_html]
 
 # Generate unoptimized test plan document
 
@@ -562,6 +564,42 @@ end
 
 task :optimized_documents => [tests_pruned_optimized_html]
 file tests_pruned_optimized_html => tests_pruned_optimized_adoc do |t|
+  system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+tests_unpruned_unoptimized_html = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized.html"
+tests_unpruned_optimized_html = "#{BUILD_UNPRUNED_DIR}/tests-optimized.html"
+task :unpruned_test_docs => [tests_unpruned_unoptimized_html, tests_unpruned_optimized_html]
+
+# Generate unoptimized test plan document
+
+tests_unpruned_unoptimized_adoc = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized.adoc"
+file tests_unpruned_unoptimized_adoc => [tests_unpruned_unoptimized_json, costs_json, tests_unpruned_unoptimized_scn_heat_png, tests_unpruned_unoptimized_obs_heat_png] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(tests_unpruned_unoptimized_scn_heat_png)
+  t.prerequisites.delete(tests_unpruned_unoptimized_obs_heat_png)
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb " +
+         "--configuration #{tests_unpruned_unoptimized_scn_heat_png} --observation #{tests_unpruned_unoptimized_obs_heat_png} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+task :unoptimized_documents => [tests_unpruned_unoptimized_html]
+file tests_unpruned_unoptimized_html => tests_unpruned_unoptimized_adoc do |t|
+  system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+# Generate optimized test plan document
+
+tests_unpruned_optimized_adoc = "#{BUILD_UNPRUNED_DIR}/tests-optimized.adoc"
+file tests_unpruned_optimized_adoc => [tests_unpruned_optimized_json, costs_json, tests_unpruned_optimized_scn_heat_png, tests_unpruned_optimized_obs_heat_png] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(tests_unpruned_optimized_scn_heat_png)
+  t.prerequisites.delete(tests_unpruned_optimized_obs_heat_png)
+  system "ruby -Ilib #{BIN_DIR}/generate-testplan.rb --optimized " +
+         "--configuration #{tests_unpruned_optimized_scn_heat_png} --observation #{tests_unpruned_optimized_obs_heat_png} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+task :optimized_documents => [tests_unpruned_optimized_html]
+file tests_unpruned_optimized_html => tests_unpruned_optimized_adoc do |t|
   system "asciidoctor -o #{t.name} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
