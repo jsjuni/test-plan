@@ -206,10 +206,33 @@ end
 
 # Generate unoptimized test plans
 
-tests_pruned_unoptimized_json = "#{BUILD_DIR}/tests-unoptimized.json"
-tests_pruned_with_10_unoptimized_json = "#{BUILD_DIR}/tests-with-10-unoptimized.json"
-tests_pruned_without_10_unoptimized_json = "#{BUILD_DIR}/tests-without-10-unoptimized.json"
-task :unoptimized_test_plans => [tests_pruned_unoptimized_json, tests_pruned_with_10_unoptimized_json, tests_pruned_without_10_unoptimized_json]
+task :unoptimized_test_plans => [:unpruned_unoptimized_test_plans, :pruned_unoptimized_test_plans]
+
+tests_unpruned_json = tests_json
+tests_unpruned_unoptimized_json = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized.json"
+tests_unpruned_with_10_unoptimized_json = "#{BUILD_UNPRUNED_DIR}/tests-with-10-unoptimized.json"
+tests_unpruned_without_10_unoptimized_json = "#{BUILD_UNPRUNED_DIR}/tests-without-10-unoptimized.json"
+task :unpruned_unoptimized_test_plans => [tests_unpruned_unoptimized_json, tests_unpruned_with_10_unoptimized_json, tests_unpruned_without_10_unoptimized_json]
+
+file tests_unpruned_unoptimized_json => [tests_unpruned_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file tests_unpruned_with_10_unoptimized_json => [tests_unpruned_with_10_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file tests_unpruned_without_10_unoptimized_json => [tests_unpruned_without_10_json, costs_json] do |t|
+  t.prerequisites.delete(costs_json)
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} --no-optimize #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+tests_pruned_unoptimized_json = "#{BUILD_PRUNED_DIR}/tests-unoptimized.json"
+tests_pruned_with_10_unoptimized_json = "#{BUILD_PRUNED_DIR}/tests-with-10-unoptimized.json"
+tests_pruned_without_10_unoptimized_json = "#{BUILD_PRUNED_DIR}/tests-without-10-unoptimized.json"
+task :pruned_unoptimized_test_plans => [tests_pruned_unoptimized_json, tests_pruned_with_10_unoptimized_json, tests_pruned_without_10_unoptimized_json]
 
 file tests_pruned_unoptimized_json => [tests_pruned_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
