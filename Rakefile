@@ -643,11 +643,22 @@ end
 
 # Generate progress plot
 
+task :progress_plots => [:pruned_progress_plot, :unpruned_progress_plot]
+
 tests_pruned_unoptimized_schedule_gan = "#{BUILD_PRUNED_DIR}/tests-unoptimized-schedule.gan"
 tests_pruned_optimized_schedule_gan = "#{BUILD_PRUNED_DIR}/tests-optimized-schedule.gan"
 test_campaign_progress_png = "#{BUILD_PRUNED_DIR}/test-campaign-progress.png"
-task :progress_plot => test_campaign_progress_png
+task :pruned_progress_plot => test_campaign_progress_png
 
 file test_campaign_progress_png => [tests_pruned_unoptimized_schedule_gan, tests_pruned_optimized_schedule_gan] do |t|
+  system "Rscript bin/progress.R #{t.prerequisites.join(' ')} #{t.name}"
+end
+
+tests_unpruned_unoptimized_schedule_gan = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-schedule.gan"
+tests_unpruned_optimized_schedule_gan = "#{BUILD_UNPRUNED_DIR}/tests-optimized-schedule.gan"
+test_campaign_progress_png = "#{BUILD_UNPRUNED_DIR}/test-campaign-progress.png"
+task :unpruned_progress_plot => test_campaign_progress_png
+
+file test_campaign_progress_png => [tests_unpruned_unoptimized_schedule_gan, tests_unpruned_optimized_schedule_gan] do |t|
   system "Rscript bin/progress.R #{t.prerequisites.join(' ')} #{t.name}"
 end
