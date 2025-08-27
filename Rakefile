@@ -605,10 +605,12 @@ end
 
 # Generate GanttProject files
 
+task :schedules => [:pruned_schedules, :unpruned_schedules]
+
 tests_pruned_unoptimized_schedule_xml = "#{BUILD_PRUNED_DIR}/tests-unoptimized-schedule.xml"
 tests_pruned_optimized_schedule_xml = "#{BUILD_PRUNED_DIR}/tests-optimized-schedule.xml"
 gantt_project_xml = "#{RESOURCES_DIR}/GanttProject.xml"
-task :schedules => [tests_pruned_unoptimized_schedule_xml, tests_pruned_optimized_schedule_xml]
+task :pruned_schedules => [tests_pruned_unoptimized_schedule_xml, tests_pruned_optimized_schedule_xml]
 
 file tests_pruned_unoptimized_schedule_xml => [tests_pruned_unoptimized_json, costs_json, gantt_project_xml] do |t|
   t.prerequisites.delete(costs_json)
@@ -617,6 +619,23 @@ file tests_pruned_unoptimized_schedule_xml => [tests_pruned_unoptimized_json, co
 end
 
 file tests_pruned_optimized_schedule_xml => [tests_pruned_optimized_json, costs_json, gantt_project_xml] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(gantt_project_xml)
+  system "ruby -Ilib #{BIN_DIR}/generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+tests_unpruned_unoptimized_schedule_xml = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-schedule.xml"
+tests_unpruned_optimized_schedule_xml = "#{BUILD_UNPRUNED_DIR}/tests-optimized-schedule.xml"
+gantt_project_xml = "#{RESOURCES_DIR}/GanttProject.xml"
+task :unpruned_schedules => [tests_unpruned_unoptimized_schedule_xml, tests_unpruned_optimized_schedule_xml]
+
+file tests_unpruned_unoptimized_schedule_xml => [tests_unpruned_unoptimized_json, costs_json, gantt_project_xml] do |t|
+  t.prerequisites.delete(costs_json)
+  t.prerequisites.delete(gantt_project_xml)
+  system "ruby -Ilib #{BIN_DIR}/generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
+end
+
+file tests_unpruned_optimized_schedule_xml => [tests_unpruned_optimized_json, costs_json, gantt_project_xml] do |t|
   t.prerequisites.delete(costs_json)
   t.prerequisites.delete(gantt_project_xml)
   system "ruby -Ilib #{BIN_DIR}/generate-gantt-project.rb --cost-map #{costs_json} --template #{gantt_project_xml} #{t.prerequisites.join(' ')} > #{t.name}"
