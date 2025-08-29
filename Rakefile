@@ -46,7 +46,7 @@ quantities_json = "#{RESOURCES_DIR}/quantities.json"
 task :quantities => quantities_json
 
 file quantities_json do |t|
-  system "ruby #{BIN_DIR}/generate-quantities.rb > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-quantities.rb --number 50 --cost-max 10 > #{t.name}"
 end
 
 # Generate scenarios
@@ -55,7 +55,7 @@ scenarios_json = "#{RESOURCES_DIR}/scenarios.json"
 task :scenarios => scenarios_json
 
 file scenarios_json do |t|
-  system "ruby #{BIN_DIR}/generate-scenarios.rb > #{t.name}"
+  system "ruby #{BIN_DIR}/generate-scenarios.rb --number 20 --proxies 6 --cost-max 20 > #{t.name}"
 end
 
 # Generate requirements

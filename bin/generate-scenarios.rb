@@ -2,10 +2,7 @@
 
 require 'logger/application'
 require 'json'
-
-SCENARIOS = (1..20).to_a.freeze
-PROXIES = (1..6).to_a.freeze
-COST_MAX = 20
+require 'optparse'
 
 class GenerateScenarios < Logger::Application
 
@@ -14,19 +11,28 @@ class GenerateScenarios < Logger::Application
   end
 
   def run
-    srand(0)
+    options = { number: 50 }
+    OptionParser.new do |opts|
+      opts.banner = "Usage: generate-requirements.rb [options]"
+      opts.on('-n NUMBER', '--number NUMBER', Integer, 'number of scenarios (default 50)')
+      opts.on('-p NUMBER', '--proxies NUMBER', Integer, 'number of proxies (default 6)')
+      opts.on('-c NUMBER', '--cost-max NUMBER', Integer, 'maximum cost (default 20)')
+      opts.on('--seed SEED', Integer, 'RNG seed')
+    end.parse!(into: options)
+
+    srand(seed = options[:seed] ? seed : 0)
     scenarios = []
-    SCENARIOS.each do |s_ord|
+    1.upto(options[:number]).each do |s_ord|
       scenarios << {
         id: "S.#{s_ord}",
-        cost: (rand * COST_MAX).to_i + 1
+        cost: (rand * options['cost-max'.to_sym]).to_i + 1
       }
     end
     proxies = []
-    PROXIES.each do |p_ord|
+    1.upto(options[:proxies]).each do |p_ord|
       proxies << {
         id: "PS.#{p_ord}",
-        cost: (rand * COST_MAX).to_i + 1
+        cost: (rand * options['cost-max'.to_sym]).to_i + 1
       }
     end
     result = { scenarios: scenarios, proxies: proxies }

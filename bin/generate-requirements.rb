@@ -31,7 +31,7 @@ class GenerateRequirements < Logger::Application
     all_quantities = JSON.parse(File.open(options[:quantities], 'r').read).map { |s| s['id'] }
     all_scenarios = JSON.parse(File.open(options[:scenarios], 'r').read)['scenarios'].map { |s| s['id'] }
 
-    srand((seed = options[:seed] ? seed : 0))
+    srand(seed = options[:seed] ? seed : 0)
     1.upto(options[:number]).each do |i|
       id = "R.#{i}"
       n_situations = (rand < P_2SITUATION) ? 2 : 1
@@ -43,9 +43,9 @@ class GenerateRequirements < Logger::Application
         }
         cl
       end
-     quantity = all_quantities.sample
+      quantity = all_quantities.sample
       @data[:requirements] << {id: id, situations: situations, quantity: quantity }
-   end
+    end
     puts JSON.pretty_generate(@data)
     0
   end
