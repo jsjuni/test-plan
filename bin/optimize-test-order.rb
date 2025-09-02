@@ -34,6 +34,7 @@ class OptimizeTestOrder < Logger::Application
       parser.on('--[no-]optimize', 'optimize test order')
       parser.on('-r', '--resort', 'resort test order randomly')
       parser.on('--concorde', 'use concorde solver')
+      parser.on('--tolerance NUMBER', '-t NUMBER', Float, 'termination tolerance for concorde solver')
     end.parse!(into: @options)
 
     raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
@@ -61,7 +62,9 @@ class OptimizeTestOrder < Logger::Application
         end
       end
       concorde = Concorde.new(concorde_spec)
-      concorde.optimize
+      concorde.optimize(@options[:tolerance]) do |msg|
+        log(Logger::INFO, "Concorde: #{msg.strip}")
+      end
       tour = concorde.tour
       reconfiguration_cost = concorde.cost
     else
