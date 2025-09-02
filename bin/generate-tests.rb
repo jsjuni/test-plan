@@ -87,6 +87,7 @@ class GenerateTests < Logger::Application
     puts JSON.pretty_generate(tests)
 
     if options[:graph]
+      log(Logger::INFO, "building configurations graph")
       rg = g.transitive_reduction
       edges = rg.edges.map do |edge|
         {
@@ -94,6 +95,7 @@ class GenerateTests < Logger::Application
           to: edge[1].to_a
         }
       end
+      log(Logger::INFO, "emitting configurations graph")
       File.open(options[:graph], 'w') do |f|
         f.puts JSON.pretty_generate(edges)
       end
@@ -101,6 +103,7 @@ class GenerateTests < Logger::Application
 
     rg = g.reverse
     if options[:summary]
+      log(Logger::INFO, "building requirements summary")
       summary = []
       requirements.each do |rh|
         configs = rh['configs'].map { |c| Set.new(c['scenarios']) }.inject(Set.new) do |m, ss|
@@ -113,6 +116,7 @@ class GenerateTests < Logger::Application
           configs: configs
         }
       end
+      log(Logger::INFO, "emitting requirements summary")
       File.open(options[:summary], 'w') do |f|
         f.puts JSON.pretty_generate(summary)
       end
