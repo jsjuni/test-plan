@@ -46,7 +46,7 @@ categories <- Reduce(
   init = c()
 )
 
-categories_by_cost = categories[order(unlist(costs[categories]))]
+categories_by_cost = categories[order(unlist(costs[categories]), categories)]
 categories_factor = factor(x = categories_by_cost, levels = categories_by_cost)
 
 map_data <- Reduce(
