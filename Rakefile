@@ -168,7 +168,7 @@ end
 # Prune tests using sufficiency assertions
 
 tests_pruned_json = "#{BUILD_PRUNED_DIR}/tests-pruned.json"
-sufficient_json = sufficient_least_1_json
+sufficient_json = sufficient_random_1_json
 task :pruned_tests => [tests_pruned_json]
 
 file tests_pruned_json => [tests_json, sufficient_json] do |t|
