@@ -52,8 +52,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/generate-requirements.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--quantities quantities.json --scenarios scenarios.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/generate-requirements.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--quantities resources/quantities.json --scenarios resources/scenarios.json" />
         <method v="2" />
       </configuration>
       <configuration default="false" name="generate-scenarios" type="RubyRunConfigurationType" factoryName="Ruby">
@@ -70,8 +70,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/generate-scenarios.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/generate-scenarios.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--number 20 --proxies 6 --cost-max 20" />
         <method v="2" />
       </configuration>
       <configuration default="false" name="generate-sufficiency" type="RubyRunConfigurationType" factoryName="Ruby">
@@ -106,8 +106,8 @@
           </COVERAGE_PATTERN>
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/generate-quantities.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/generate-quantities.rb" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--number 50 --cost-max 10" />
         <method v="2" />
       </configuration>
       <configuration default="false" name="generate-testplan" type="RubyRunConfigurationType" factoryName="Ruby">
@@ -179,7 +179,7 @@
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
         <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/optimize-test-order.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map build/costs.json --concorde build/tests-pruned.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map build/costs.json --concorde build_pruned/tests-pruned.json" />
         <method v="2" />
       </configuration>
     </shared>
