@@ -13,6 +13,7 @@ task :default => %w[
   optimized_scn_visualizations
   unoptimized_obs_visualizations
   optimized_obs_visualizations
+  cost_hists
   test_docs
   schedules
 ]
@@ -470,7 +471,7 @@ file tests_pruned_without_10_optimized_obs_vis_txt => [tests_pruned_without_10_o
   system "ruby -Ilib #{BIN_DIR}/visualize-plan.rb --observations --cost-map #{costs_json} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
-# Generate heat maps for test plan documents
+# Generate heat maps for test plans
 
 task :heat_maps => [:unpruned_heat_maps, :pruned_heat_maps]
 
@@ -526,6 +527,26 @@ end
 file tests_pruned_optimized_obs_heat_png => [costs_json, tests_pruned_optimized_json] do |t|
   t.prerequisites.delete(costs_json)
   system "Rscript bin/generate-heat-map.R --observation #{costs_json} #{t.prerequisites.first} #{t.name}"
+end
+
+# Generate cost histograms for test plans
+
+task :cost_hists => [:unpruned_cost_hist, :pruned_cost_hist]
+
+tests_unpruned_cfg_hist_png = "#{BUILD_UNPRUNED_DIR}/tests-unoptimized-cfg-hist.png"
+
+task :unpruned_cost_hist => [tests_unpruned_cfg_hist_png]
+
+file tests_unpruned_cfg_hist_png => [costs_json, tests_unpruned_unoptimized_json, tests_unpruned_optimized_json] do |t|
+   system "Rscript bin/generate-cost-hist.R #{t.prerequisites.join(' ')} #{t.name}"
+end
+
+tests_pruned_cfg_hist_png = "#{BUILD_PRUNED_DIR}/tests-cfg-hist.png"
+
+task :pruned_cost_hist => [tests_pruned_cfg_hist_png]
+
+file tests_pruned_cfg_hist_png => [costs_json, tests_pruned_unoptimized_json, tests_pruned_optimized_json] do |t|
+  system "Rscript bin/generate-cost-hist.R #{t.prerequisites.join(' ')} #{t.name}"
 end
 
 # Generate test plan documents
