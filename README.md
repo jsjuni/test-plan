@@ -3,12 +3,7 @@ Experiments with optimizing test campaign schedules.
 
 ## Building
 
-The following steps build unoptimized and optimized test plan documents in the `build` directory: `tests-unoptimized.html` and `tests-optimized.html`.
-
-1. `rake clean`
-2. `rake proxy_none`
-3. `rake sufficient_none`
-4. `rake`
+Executing the command `rake` builds test plan documents and predecessor products in folders `build`, `build_unpruned`, and `build_pruned` (see Sufficiency Assertions below). Complete build specifications are in `Rakefile`.
 
 ### Proxies for Applicability Situations
 
@@ -16,10 +11,10 @@ Ideally, the test configurations that serve as proxies for applicability situati
 
 |target|strategy|
 |------|--------|
-| `proxy_none` | test configurations identical to applicability situations |
-| `proxy_simple` | {`PS.1`} proxy for {`S.16`}, {`PS.2`} proxy for {`S.5`, `S.14`}, {`PS.3`, `PS.4`} proxy for {`S.4`, `S.19`}
+| `proxy_map_none` | test configurations identical to applicability situations |
+| `proxy_map_simple` | {`PS.1`} proxy for {`S.16`}, {`PS.2`} proxy for {`S.5`, `S.14`}, {`PS.3`, `PS.4`} proxy for {`S.4`, `S.19`}
 
-Switch proxy strategy by `rake`_`proxy_target`_ followed by `rake`.
+The default is `proxy_map_simple`. It can be changed by modifying the variable `proxy_map_json` in `Rakefile`.
 
 ### Sufficiency Assertions
 
@@ -33,12 +28,14 @@ For the purpose of sufficiency assertions, assume that the configurations for a 
 | `sufficient_most` | all most restrictive configurations are necessary and suffice |
 | `sufficient_most_1` | one least restrictive configuration is necessary and suffices |
 | `sufficient_random` | random choice of `sufficient_least` or `sufficient_most` for each requirement |
-| `sufficient_least_1` | one congfiguration randomly chosen from `sufficient_random` for each requirement |
+| `sufficient_random_1` | one congfiguration randomly chosen from `sufficient_random` for each requirement |
 
-Switch sufficency strategy by `rake`_`sufficiency_target`_ followed by `rake`.
+The default is `sufficient_random_1`. It can be changed by modifying the variable `sufficient_json` in `Rakefile`.
+
+The `Rakefile` executes the complete workflow for both unpruned (in `build/unpruned`, without sufficiency assertions) and pruned (in `build/pruned`, with sufficiency assertions) configurations, for comparison purposes. 
 
 ### Optimization Strategy
 
-By default, the test plan optimization strategy uses the [Concorde TSP Solver](https://www.math.uwaterloo.ca/tsp/concorde.html) running in a Docker container with image [alehkot/concorde-tsp](https://hub.docker.com/r/alehkot/concorde-tsp). Calling this solver requires a Ruby wrapper not included in this repository. To use the built-in 2-opt heuristic, edit `Rakefile` and remove the argument `--concorde` from three locations.
+By default, the test plan optimization strategy uses a Ruby implementation of the [2-opt heuristic](https://en.wikipedia.org/wiki/2-opt). 2-opt is a polynomial time algorithm that appears to yield satisfactory results in many cases.
 
-2-opt is very fast and produces a tour approximately 10% longer than Concorde (in limited testing).
+If the [Concorde TSP Solver](https://www.math.uwaterloo.ca/tsp/concorde.html) is availble, it can be invoked with a Ruby wrapper found [here](https://github.com/jsjuni/ruby-concorde). The `Rakefile` detects the presence of the wrapper files in `lib` and switches automatically.

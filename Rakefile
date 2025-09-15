@@ -74,7 +74,9 @@ end
 # Substitute scenario proxies.
 
 requirements_proxied_json = "#{BUILD_DIR}/requirements-proxied.json"
-proxy_map_json = "#{RESOURCES_DIR}/proxy-map-simple.json"
+proxy_map_none = "#{RESOURCES_DIR}/proxy-map-none.json"
+proxy_map_simple = "#{RESOURCES_DIR}/proxy-map-simple.json"
+proxy_map_json = proxy_map_simple
 task :substitute_proxies => requirements_proxied_json
 
 file requirements_proxied_json => [requirements_json, proxy_map_json] do |t|
