@@ -67,7 +67,7 @@ scaled_map_data <- Reduce(
   )
 )
 
-png(filename = png_file, width = 800, height = 600)
+png(filename = png_file, width = 1200, height = 600)
 
 cost_col <- if (type == "--configuration") scaled_map_data$scaled_cost else scaled_map_data$cost
 ggplot(scaled_map_data, aes(x=test, y=category)) +

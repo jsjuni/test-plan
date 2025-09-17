@@ -68,5 +68,5 @@ plot_data <- Reduce(
   )
 )
 
-png(filename = png_file, width = 800, height = 600)
+png(filename = png_file, width = 1200, height = 600)
 ggplot(plot_data, aes(x = cost, fill = dataset)) + geom_histogram(binwidth = 5, position = "dodge")
