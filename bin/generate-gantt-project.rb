@@ -50,10 +50,10 @@ class GenerateGanttProject < Logger::Application
       task_id = test_id * 10
       parent_task << task = ProjectXML::Task.new(task_id, "Test #{test_id}", 0)
       config_duration = cfg_duration((t['apply'] + t['retract']).inject(0) { |s, r| s + cfg_cost_map[r] })
-      log(Logger::INFO, "test #{test_id} config duration: #{config_duration}")
+      log(Logger::DEBUG, "test #{test_id} config duration: #{config_duration}")
       task << config_task = ProjectXML::Task.new(task_id + 1, "Test #{test_id} Configuration", config_duration)
       exec_duration = obs_duration(t['quantities'].keys.inject(0) { |s, r| s + obs_cost_map[r] })
-      log(Logger::INFO, "test #{test_id} exec duration: #{exec_duration}")
+      log(Logger::DEBUG, "test #{test_id} exec duration: #{exec_duration}")
       task << execut_task = ProjectXML::Task.new(task_id + 2, "Test #{test_id} Execution", exec_duration)
       config_task.add_successor(execut_task.attributes['id'])
       prev_task.add_successor(task_id) if prev_task
