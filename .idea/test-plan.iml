@@ -179,7 +179,7 @@
         </EXTENSION>
         <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
         <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/optimize-test-order.rb" />
-        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map build/costs.json --concorde build_pruned/tests-pruned.json" />
+        <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="--cost-map build/costs.json --lkh build_pruned/tests-pruned.json" />
         <method v="2" />
       </configuration>
     </shared>
