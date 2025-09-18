@@ -255,6 +255,7 @@ end
 # Generate optimized test plans
 
 concorde_opt = FileTest.exist?("lib/concorde.rb") ? '--concorde' : ''
+lkh_opt = (concorde_opt.empty? && FileTest.exist?("lib/lkh.rb")) ? '--lkh' : ''
 
 task :optimized_test_plans => [:unpruned_unoptimized_test_plans, :pruned_unoptimized_test_plans]
 
@@ -266,17 +267,17 @@ task :unpruned_optimized_test_plans => [tests_unpruned_optimized_json, tests_unp
 
 file tests_unpruned_optimized_json => [tests_unpruned_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{lkh_opt} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_unpruned_with_10_optimized_json => [tests_unpruned_with_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{lkh_opt} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 file tests_unpruned_without_10_optimized_json => [tests_unpruned_without_10_json, costs_json] do |t|
   t.prerequisites.delete(costs_json)
-  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{t.prerequisites.join(' ')} > #{t.name}"
+  system "ruby -Ilib #{BIN_DIR}/optimize-test-order.rb --cost-map #{costs_json} #{concorde_opt} --tolerance #{concorde_tolerance} #{lkh_opt} #{t.prerequisites.join(' ')} > #{t.name}"
 end
 
 tests_pruned_optimized_json = "#{BUILD_PRUNED_DIR}/tests-optimized.json"

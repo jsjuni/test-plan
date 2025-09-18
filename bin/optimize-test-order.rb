@@ -35,6 +35,7 @@ class OptimizeTestOrder < Logger::Application
       parser.on('-r', '--resort', 'resort test order randomly')
       parser.on('--concorde', 'use concorde solver')
       parser.on('--tolerance NUMBER', '-t NUMBER', Float, 'termination tolerance for concorde solver')
+      parser.on('--lkh', 'use lkh solver')
     end.parse!(into: @options)
 
     raise 'missing cost map' unless (cost_map_file = @options['cost-map'.to_sym])
@@ -52,21 +53,35 @@ class OptimizeTestOrder < Logger::Application
       c + t['quantities'].keys.map { |q| cost_map['observations'][q] }.reduce(0, :+)
     end
 
-    if @options[:concorde]
-      require 'concorde'
+    if @options[:concorde] || @options[:lkh]
       require 'tsplib'
-      concorde_spec = TSPLIB::TSP.new('tests', 'tests', tests.length)
-      0.upto(concorde_spec.dimension - 1) do |i|
+      tsp = TSPLIB::TSP.new('tests', 'tests', tests.length)
+      0.upto(tsp.dimension - 1) do |i|
         0.upto(i) do |j|
-          concorde_spec.weight[i][j] = weights[i][j]
+          tsp.weight[i][j] = weights[i][j]
         end
       end
-      concorde = Concorde.new(concorde_spec)
-      concorde.optimize(@options[:tolerance]) do |msg|
-        log(Logger::INFO, "Concorde: #{msg.strip}")
+      if @options[:concorde]
+        require 'concorde'
+        solver = Concorde.new(tsp)
+        solver.optimize(@options[:tolerance]) do |msg|
+          log(Logger::INFO, "Concorde: #{msg.strip}")
+        end
+      else
+        require 'lkh'
+        solver = LKH.new(tsp)
+        solver.optimize() do |msg|
+          log(Logger::INFO, "LKH: #{msg.strip}")
+        end
       end
-      tour = concorde.tour
-      reconfiguration_cost = concorde.cost
+      tour = solver.tour
+      reconfiguration_cost = solver.cost
+    elsif @options[:lkh]
+      tsp = TSPLIB::TSP.new('tests', 'tests', tests.length)
+      lkh = LKH.new(tsp)
+      lkh.optimize if @options[:optimize]
+      tour = lkh.tour
+      reconfiguration_cost = lkh.cost
     else
       tsp = ::TSP_2opt.new(weights)
       log(Logger::INFO, "initial tour cost: #{tsp.cost}")
